@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "projects": {
+    "api": "apps/api",
+    "api-interfaces": "libs/api-interfaces",
+    "question-answer": "apps/question-answer",
+    "question-answer-e2e": "apps/question-answer-e2e"
+  }
+}
