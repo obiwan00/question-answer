@@ -1,9 +1,8 @@
-<div style="text-align: center">
-  <h1>Welcome to question-answer!</h1>
-  <img
-    width="450"
-    src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-    alt="Nx - Smart, Fast and Extensible Build System"
-  />
-</div>
-<div>Message: {{ hello$ | async | json }}</div>
+<h1>Welcome to question-answer!</h1>
+<p>Message: {{ hello$ | async | json }}</p>
+<mat-form-field appearance="fill">
+  <mat-label>Text</mat-label>
+  <mat-select multiple>
+    <mat-option *ngFor="let option of options">{{option}}</mat-option>
+  </mat-select>
+</mat-form-field>

@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/question-answer",
         "index": "apps/question-answer/src/index.html",
@@ -18,7 +20,10 @@
           "apps/question-answer/src/favicon.ico",
           "apps/question-answer/src/assets"
         ],
-        "styles": ["apps/question-answer/src/styles.scss"],
+        "styles": [
+          "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+          "apps/question-answer/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -86,7 +91,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/question-answer"],
+      "outputs": [
+        "coverage/apps/question-answer"
+      ],
       "options": {
         "jestConfig": "apps/question-answer/jest.config.js",
         "passWithNoTests": true
