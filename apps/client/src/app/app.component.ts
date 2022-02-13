@@ -8,7 +8,7 @@ import { Message } from '@question-answer/api-interfaces';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  public options = ['Option 1', 'Option 2', 'Option 3']
-  hello$ = this.http.get<Message>('/api/hello');
-  constructor(private http: HttpClient) {}
+  public options = ['Option 1', 'Option 2', 'Option 3'];
+  public hello$ = this.http.get<Message>('/api/hello');
+  public constructor(private http: HttpClient) {}
 }
