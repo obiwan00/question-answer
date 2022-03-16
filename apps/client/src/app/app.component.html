@@ -1,8 +1,2 @@
 <h1>Welcome to question-answer!</h1>
-<p>Message: {{ hello$ | async | json }}</p>
-<mat-form-field appearance="fill">
-  <mat-label>Text</mat-label>
-  <mat-select multiple>
-    <mat-option *ngFor="let option of options">{{ option }}</mat-option>
-  </mat-select>
-</mat-form-field>
+<p>Message: {{ (hello$ | async)?.message }}</p>
