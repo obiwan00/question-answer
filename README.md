@@ -63,6 +63,12 @@ Run `ng serve my-app` for a dev server. Navigate to http://localhost:4200/. The 
 
 Run `ng g component my-component --project=my-app` to generate a new component.
 
+## Migrations
+
+Create migration: `yarn run createMigration -n migration-file-name<time-stamp>`.\
+Run migration: `yarn run createMigration`.\
+Revert migration: `yarn run revertMigration`.
+
 ## Build
 
 Run `ng build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
