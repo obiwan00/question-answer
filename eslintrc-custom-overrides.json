@@ -11,7 +11,14 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "semi": [2, "always"]
+        "semi": [
+          "error",
+          "always",
+          {
+            "omitLastInOneLineBlock": true
+          }
+        ],
+        "comma-dangle": ["error", "always-multiline"]
       }
     }
   ]

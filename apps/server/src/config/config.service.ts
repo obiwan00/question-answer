@@ -1,9 +1,8 @@
-import { User } from './../entity/user.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-
 import * as dotenv from 'dotenv';
 import { join } from 'path';
 import { getMetadataArgsStorage } from 'typeorm';
+
 dotenv.config();
 
 
@@ -50,7 +49,7 @@ class ConfigService {
 
       entities: [
         join(__dirname, './**/*.entity{.ts,.js}'),
-        ...getMetadataArgsStorage().tables.map(tbl => tbl.target)
+        ...getMetadataArgsStorage().tables.map(tbl => tbl.target),
       ],
       migrationsTableName: 'migration',
       migrations: [join(__dirname, '../migration/*.ts')],
@@ -83,7 +82,7 @@ configService.ensureValues([
   'POSTGRES_PORT',
   'POSTGRES_USER',
   'POSTGRES_PASSWORD',
-  'POSTGRES_DATABASE'
+  'POSTGRES_DATABASE',
 ]);
 
 export { configService };
