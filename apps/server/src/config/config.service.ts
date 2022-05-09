@@ -57,7 +57,7 @@ class ConfigService {
         migrationsDir: join(__dirname, '../migration'),
       },
 
-      ssl: this.isProduction(),
+      ssl: this.getValue('USE_SSL') === 'true',
     };
     console.log('mode:', this.getValue('MODE'));
     console.log('isProduction:', this.isProduction());
