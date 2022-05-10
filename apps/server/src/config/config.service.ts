@@ -66,10 +66,10 @@ class ConfigService {
     return config;
   }
 
-  private getValue(key: string, throwErrorOnMissing = true): string | undefined {
+  public getValue(key: string, throwErrorOnMissing = true): string | undefined {
     const value = this.env[key];
     if (!value && throwErrorOnMissing) {
-      throw new Error(`config error - missing env.${key}`);
+      throw new Error(`Config error - missing env.${key}`);
     }
 
     return value;

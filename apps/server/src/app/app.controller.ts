@@ -1,8 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
+import { Message } from '@qa/api-interfaces';
+import { AppService } from '@qa/server/app/app.service';
 
-import { Message } from '@question-answer/api-interfaces';
-
-import { AppService } from './app.service';
 
 @Controller()
 export class AppController {

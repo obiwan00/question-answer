@@ -3,10 +3,10 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './app/app.module';
+import { AppModule } from '@qa/server/app/app.module';
 
 
 const port = process.env.PORT || 3000;
@@ -17,6 +17,13 @@ async function bootstrap(): Promise<void> {
   app.setGlobalPrefix(globalPrefix);
   app.enableShutdownHooks();
 
+  // CORS
+  app.enableCors();
+
+  // Validation
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+
+  // Swagger
   const config = new DocumentBuilder()
     .setTitle('Question Answers API')
     .setVersion('1.0')

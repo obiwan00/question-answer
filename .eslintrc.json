@@ -11,7 +11,7 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
-            "allow": [],
+            "allow": ["@qa/**"],
             "depConstraints": [
               {
                 "sourceTag": "*",
@@ -24,7 +24,10 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript", "plugin:@typescript-eslint/recommended"],
+      "extends": [
+        "plugin:@nrwl/nx/typescript",
+        "plugin:@typescript-eslint/recommended"
+      ],
       "rules": {}
     },
     {

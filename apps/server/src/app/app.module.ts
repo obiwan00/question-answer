@@ -1,13 +1,17 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { configService } from '../config/config.service';
+import { GoogleAuthModule } from '@qa/server/auth/google-auth/google-auth.module';
+import { UserModule } from '@qa/server/user/user.module';
+import { configService } from '@qa/server/config';
+import { AppService } from '@qa/server/app/app.service';
+import { AppController } from '@qa/server/app/app.controller';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+    UserModule,
+    GoogleAuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

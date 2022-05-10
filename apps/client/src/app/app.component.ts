@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Message } from '@question-answer/api-interfaces';
+import { Message } from '@qa/api-interfaces';
 
 @Component({
   selector: 'question-answer-root',
