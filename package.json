@@ -9,7 +9,7 @@
     "buildClient": "yarn nx run client:build:production",
     "buildServer": "yarn nx run server:build:production",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
-    "createOrmConfig": "(rm ormconfig.json || :) && ts-node -r tsconfig-paths/register --project ./tsconfig.base.json -O '{\"module\":\"commonjs\"}' ./apps/server/src/scripts/write-type-orm-config.ts",
+    "createOrmConfig": "(rm ormconfig.json || :) && ts-node -r tsconfig-paths/register --project ./tsconfig.base.json -O '{\"module\":\"commonjs\"}' ./apps/server/src/typeorm/scripts/write-type-orm-config.ts",
     "pretypeorm": "yarn run createOrmConfig",
     "typeorm": "ts-node -r tsconfig-paths/register --project ./tsconfig.base.json -O '{\"module\":\"commonjs\"}' ./node_modules/typeorm/cli.js",
     "createMigration": "cross-env MODE=production yarn run typeorm migration:generate",
@@ -45,6 +45,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.4.0",
     "swagger-ui-express": "^4.3.0",
+    "ts-node": "^10.7.0",
     "tslib": "^2.0.0",
     "typeorm": "^0.2.42",
     "zone.js": "~0.11.4"

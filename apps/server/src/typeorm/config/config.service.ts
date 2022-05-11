@@ -6,13 +6,27 @@ import { getMetadataArgsStorage } from 'typeorm';
 dotenv.config();
 
 
+type RemoveIndex<T> = {
+  [P in keyof T as string extends P ? never : number extends P ? never : P]: T[P]
+};
+// NodeJS.ProcessEnv without "[key: string]: string | undefined" and "[key: number]: string | undefined"
+type ProcessEnv = RemoveIndex<NodeJS.ProcessEnv>;
+
+
 class ConfigService {
 
-  public constructor(private env: { [key: string]: string | undefined }) { }
+  public constructor(private env: { [key in keyof ProcessEnv]: string | undefined }) { }
+
+  public getValue(key: keyof ProcessEnv): string | undefined {
+    return this.env[key];
+  }
 
 
-  public ensureValues(keys: string[]): this {
-    keys.forEach(key => this.getValue(key, true));
+  public ensureValues(keys: Array<keyof ProcessEnv>): this {
+    keys.map(key => ({ key, value: this.getValue(key) }))
+      .filter(({ value }) => value === undefined)
+      .forEach(({ key }) => { throw new Error(`Config error - missing env.${key}`) });
+
     return this;
   }
 
@@ -48,7 +62,7 @@ class ConfigService {
       synchronize: this.isDevelopment(),
 
       entities: [
-        join(__dirname, './**/*.entity{.ts,.js}'),
+        join(__dirname, '../entity/**/*.entity{.ts,.js}'),
         ...getMetadataArgsStorage().tables.map(tbl => tbl.target),
       ],
       migrationsTableName: 'migration',
@@ -64,15 +78,6 @@ class ConfigService {
     console.log('isDevelopment:', this.isDevelopment());
     console.log('config', config);
     return config;
-  }
-
-  public getValue(key: string, throwErrorOnMissing = true): string | undefined {
-    const value = this.env[key];
-    if (!value && throwErrorOnMissing) {
-      throw new Error(`Config error - missing env.${key}`);
-    }
-
-    return value;
   }
 }
 

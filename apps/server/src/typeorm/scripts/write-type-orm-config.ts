@@ -1,4 +1,4 @@
-import { configService } from '@qa/server/config';
+import { configService } from '@qa/server/typeorm';
 import { writeFileSync } from 'fs';
 
 writeFileSync('ormconfig.json',

@@ -19,6 +19,11 @@
       "@qa/client/*": ["apps/client/src/*"],
       "@qa/server/*": ["apps/server/src/*"]
     }
+    // "types": ["node"]
   },
+  "ts-node": {
+    "files": true
+  },
+  "files": ["environment.d.ts"],
   "exclude": ["node_modules", "tmp"]
 }
