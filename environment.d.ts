@@ -14,5 +14,6 @@ declare namespace NodeJS {
     PORT?: string,
     MODE?: string,
     USE_SSL?: string,
+    SESSION_SECRET?: string,
   }
 }

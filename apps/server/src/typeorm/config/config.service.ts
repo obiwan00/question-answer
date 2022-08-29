@@ -21,7 +21,6 @@ class ConfigService {
     return this.env[key];
   }
 
-
   public ensureValues(keys: Array<keyof ProcessEnv>): this {
     keys.map(key => ({ key, value: this.getValue(key) }))
       .filter(({ value }) => value === undefined)
@@ -88,6 +87,16 @@ configService.ensureValues([
   'POSTGRES_USER',
   'POSTGRES_PASSWORD',
   'POSTGRES_DATABASE',
+  'RUN_MIGRATIONS',
+
+  'GOOGLE_CLIENT_ID',
+  'GOOGLE_SECRET',
+
+  'HOST',
+  'PORT',
+  'MODE',
+  'USE_SSL',
+  'SESSION_SECRET',
 ]);
 
 export { configService };

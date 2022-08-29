@@ -1,6 +1,6 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { GoogleAuthGuard } from '@qa/server/auth/google-auth/guards/google-auth.guard';
 import { GoogleAuthService } from '@qa/server/auth/google-auth/services/google-auth.service';
 import { Response } from 'express';
 
@@ -12,14 +12,12 @@ export class GoogleAuthController {
   }
 
   @Get('login')
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(GoogleAuthGuard)
   public async googleAuth(): Promise<void> { return }
 
   @Get('redirect')
-  @UseGuards(AuthGuard('google'))
-  public async googleAuthRedirect(@Req() req: Response): Promise<void> {
-    return this.googleAuthService.googleLogin(req);
-    // res.send(200);
-    // res.redirect('/');
+  @UseGuards(GoogleAuthGuard)
+  public async googleAuthRedirect(@Req() res: Response): Promise<void> {
+    res.send(200);
   }
 }

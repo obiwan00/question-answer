@@ -9,7 +9,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: configService.getValue('GOOGLE_CLIENT_ID'),
       clientSecret: configService.getValue('GOOGLE_SECRET'),
-      callbackURL: `${configService.getValue('HOST')}:${configService.getValue('PORT')}/api/auth/google/redirect`, // TODO: somewhen create shared constants file for routes
+      // TODO: somewhen create shared constants file for routes
+      callbackURL: `${configService.getValue('HOST')}:${configService.getValue('PORT')}/api/auth/google/redirect`,
       scope: ['email', 'profile'],
     });
   }
@@ -18,7 +19,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     accessToken: string,
     refreshToken: string,
     profile: Profile,
-    done: VerifyCallback,
   ): Promise<void> {
     const { name, emails, photos } = profile;
     const user = {
@@ -29,6 +29,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       accessToken,
     };
 
-    done(null, user);
+    console.log('user:', user);
   }
 }
