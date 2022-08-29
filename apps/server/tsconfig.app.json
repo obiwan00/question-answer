@@ -7,7 +7,7 @@
     "emitDecoratorMetadata": true,
     "target": "es2015"
   },
-  "exclude": ["**/*.spec.ts", "**/*.test.ts"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts", "jest.config.ts"],
   "include": ["**/*.ts", "../../environment.d.ts"],
   "composite": true
 }
