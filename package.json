@@ -4,17 +4,15 @@
   "license": "MIT",
   "scripts": {
     "ng": "nx",
-    "startClient": "yarn nx serve client",
-    "startServer": "yarn nx serve server",
-    "buildClient": "yarn nx run client:build:production",
-    "buildServer": "yarn nx run server:build:production",
+    "start:client": "yarn nx serve client",
+    "start:server": "yarn nx serve server",
+    "build:client": "yarn nx run client:build:production",
+    "build:server": "yarn nx run server:build:production",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2020 browser module main",
-    "createOrmConfig": "(rm ormconfig.json || :) && ts-node -r tsconfig-paths/register --project ./tsconfig.base.json -O '{\"module\":\"commonjs\"}' ./apps/server/src/typeorm/scripts/write-type-orm-config.ts",
-    "pretypeorm": "yarn run createOrmConfig",
-    "typeorm": "ts-node -r tsconfig-paths/register --project ./tsconfig.base.json -O '{\"module\":\"commonjs\"}' ./node_modules/typeorm/cli.js",
-    "createMigration": "cross-env MODE=production yarn run typeorm migration:generate",
-    "runMigration": "yarn run typeorm migration:run",
-    "revertMigration": "yarn run typeorm migration:revert"
+    "typeorm": "cross-env MODE=production ts-node -r tsconfig-paths/register --project ./tsconfig.base.json -O '{\"module\":\"commonjs\"}' ./node_modules/typeorm/cli.js --config ./apps/server/src/typeorm/ormconfig.ts",
+    "db:drop": "yarn typeorm schema:drop",
+    "db:create": "yarn typeorm migration:generate",
+    "db:migrate": "yarn typeorm migration:run"
   },
   "private": true,
   "dependencies": {
@@ -88,4 +86,3 @@
     "nx": "14.5.10"
   }
 }
-

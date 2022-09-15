@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { configService } from '@qa/server/typeorm';
+import { EnvFields } from '@qa/server/typeorm/config/env-fields.model';
+import { getEnvFieldValue } from '@qa/server/typeorm/config/get-env-value.util';
 import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   public constructor() {
     super({
-      clientID: configService.getValue('GOOGLE_CLIENT_ID'),
-      clientSecret: configService.getValue('GOOGLE_SECRET'),
+      clientID: getEnvFieldValue(EnvFields.GOOGLE_CLIENT_ID),
+      clientSecret: getEnvFieldValue(EnvFields.GOOGLE_SECRET),
       // TODO: somewhen create shared constants file for routes
-      callbackURL: `${configService.getValue('HOST')}:${configService.getValue('PORT')}/api/auth/google/redirect`,
+      callbackURL: `${getEnvFieldValue(EnvFields.HOST)}:${getEnvFieldValue(EnvFields.PORT)}/api/auth/google/redirect`,
       scope: ['email', 'profile'],
     });
   }

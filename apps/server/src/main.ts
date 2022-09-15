@@ -7,7 +7,8 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from '@qa/server/app.module';
-import { configService } from '@qa/server/typeorm';
+import { EnvFields } from '@qa/server/typeorm/config/env-fields.model';
+import { getEnvFieldValue } from '@qa/server/typeorm/config/get-env-value.util';
 import * as session from 'express-session';
 import * as passport from 'passport';
 
@@ -26,7 +27,7 @@ async function bootstrap(): Promise<void> {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24, // 24 hours
       },
-      secret: configService.getValue('SESSION_SECRET'),
+      secret: getEnvFieldValue(EnvFields.SESSION_SECRET),
       resave: false,
       saveUninitialized: false,
     }),

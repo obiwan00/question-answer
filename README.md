@@ -65,9 +65,9 @@ Run `ng g component my-component --project=my-app` to generate a new component.
 
 ## Migrations
 
-Create migration: `yarn run createMigration -n migration-file-name`.\
-Run migration: `yarn run runMigration`.\
-Revert migration: `yarn run revertMigration`.
+Create migration: `yarn db:create -n migration-file-name`.\
+Run migration: `yarn db:migrate`.\
+Drop DB: `yarn db:drop`.
 
 ## Build
 
