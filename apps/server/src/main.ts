@@ -6,7 +6,7 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from '@qa/server/app/app.module';
+import { AppModule } from '@qa/server/app.module';
 import { configService } from '@qa/server/typeorm';
 import * as session from 'express-session';
 import * as passport from 'passport';

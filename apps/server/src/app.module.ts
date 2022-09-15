@@ -1,24 +1,22 @@
 import { Module } from '@nestjs/common';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GoogleAuthModule } from '@qa/server/auth/google-auth/google-auth.module';
-import { UserModule } from '@qa/server/user/user.module';
+import { TagModule } from '@qa/server/tag/tag.module';
 import { configService } from '@qa/server/typeorm';
-import { AppService } from '@qa/server/app/app.service';
-import { AppController } from '@qa/server/app/app.controller';
-import { PassportModule } from '@nestjs/passport';
+import { UserModule } from '@qa/server/user/user.module';
 
 
-// TODO: move this file to server/src folder and remove redundant files, such as app.controller, app.service etc.
 @Module({
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+
+    // auth
     PassportModule.register({ session: true }),
     GoogleAuthModule,
 
-
     UserModule,
+    TagModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule { }

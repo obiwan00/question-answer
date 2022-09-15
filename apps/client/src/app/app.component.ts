@@ -9,6 +9,7 @@ import { Message } from '@qa/api-interfaces';
 })
 export class AppComponent {
   public hello$ = this.http.get<Message>('/api/hello');
+  public tags$ = this.http.get<string[]>('/api/tags');
 
   public constructor(private http: HttpClient) { }
 }

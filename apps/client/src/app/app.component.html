@@ -1,4 +1,5 @@
 <h1>Welcome to question-answer!</h1>
 <p>Message: {{ (hello$ | async)?.message }}</p>
+<p>Tags: {{ (tags$ | async)?.join(', ') }}</p>
 
 <a href="/api/auth/google/login">login with Google</a>
