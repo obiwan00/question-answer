@@ -12,3 +12,17 @@ export class UserDTO implements Pick<User, 'username' | 'email'> {
   @IsEmail({}, { message: 'email should be valid' })
   public email: string;
 }
+
+export class CreateUserDto {
+  @ApiProperty()
+  @IsString()
+  public readonly username: string;
+
+  @ApiProperty()
+  @IsString()
+  public readonly email: string;
+
+  @ApiProperty()
+  @IsString()
+  public readonly password: string;
+}

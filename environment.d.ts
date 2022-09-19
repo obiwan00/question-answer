@@ -7,13 +7,8 @@ declare namespace NodeJS {
     POSTGRES_DATABASE?: string,
     RUN_MIGRATIONS?: string,
 
-    GOOGLE_CLIENT_ID?: string,
-    GOOGLE_SECRET?: string,
-
     HOST?: string,
     PORT?: string,
     MODE?: string,
-    USE_SSL?: string,
-    SESSION_SECRET?: string,
   }
 }

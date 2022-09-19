@@ -7,10 +7,6 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from '@qa/server/app.module';
-import { EnvFields } from '@qa/server/typeorm/config/env-fields.model';
-import { getEnvFieldValue } from '@qa/server/typeorm/config/get-env-value.util';
-import * as session from 'express-session';
-import * as passport from 'passport';
 
 
 const port = process.env.PORT || 3000;
@@ -21,22 +17,8 @@ async function bootstrap(): Promise<void> {
   app.setGlobalPrefix(globalPrefix);
   app.enableShutdownHooks();
 
-  // Sessions
-  app.use(
-    session({
-      cookie: {
-        maxAge: 1000 * 60 * 60 * 24, // 24 hours
-      },
-      secret: getEnvFieldValue(EnvFields.SESSION_SECRET),
-      resave: false,
-      saveUninitialized: false,
-    }),
-  );
-  app.use(passport.initialize());
-  app.use(passport.session());
-
   // Validation
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  // app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   // Swagger
   const config = new DocumentBuilder()

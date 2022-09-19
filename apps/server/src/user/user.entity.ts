@@ -1,8 +1,8 @@
-import { User } from "@qa/api-interfaces";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { randomBytes, pbkdf2Sync } from "crypto";
 
-@Entity('user')
-export class UserEntity implements User {
+@Entity({ name: 'users' })
+export class UserEntity {
   @PrimaryGeneratedColumn('increment')
   public id: number;
 
@@ -12,8 +12,22 @@ export class UserEntity implements User {
   @Column({ unique: true, nullable: false })
   public email: string;
 
-  @Column({ name: 'google_id', unique: true, nullable: false })
-  public googleId: string;
+  @Column({ unique: true, nullable: false })
+  public password: string;
+
+  @Column({ unique: true, nullable: false })
+  public salt: string;
+
+  @BeforeInsert()
+  public async hashPassword(): Promise<void> {
+    this.salt = randomBytes(16).toString('hex');
+    const contentToHash = this.password;
+    const iterations = 1000;
+    const keyLenth = 64;
+    const digestAlgorithm = 'sha512';
+
+    this.password = pbkdf2Sync(contentToHash, this.salt, iterations, keyLenth, digestAlgorithm).toString('hex');
+  }
 
   @CreateDateColumn({ name: 'create_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   public createdAt: string;

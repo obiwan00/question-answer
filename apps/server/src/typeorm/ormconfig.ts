@@ -1,6 +1,8 @@
+import { TagEntity } from '@qa/server/tag/tag.entity';
 import { ensureObjectValues } from '@qa/server/typeorm/config/ensure-values.util';
 import { EnvFields } from '@qa/server/typeorm/config/env-fields.model';
 import { getEnvFieldValue } from '@qa/server/typeorm/config/get-env-value.util';
+import { UserEntity } from '@qa/server/user/user.entity';
 import * as dotenv from 'dotenv';
 import { join } from 'path';
 import { ConnectionOptions, getMetadataArgsStorage } from "typeorm";
@@ -9,7 +11,7 @@ import { ConnectionOptions, getMetadataArgsStorage } from "typeorm";
 dotenv.config();
 
 ensureObjectValues(process.env, (Object).keys(EnvFields));
-const isDevelopment = getEnvFieldValue(EnvFields.MODE) === 'development';
+const isDevelopment = getEnvFieldValue(EnvFields.NODE_ENV) === 'development';
 
 const ormconfig: ConnectionOptions = {
   type: 'postgres',
@@ -21,8 +23,8 @@ const ormconfig: ConnectionOptions = {
 
   synchronize: isDevelopment,
   entities: [
-    join(__dirname, '../**/*.entity{.ts, .js}'),
-    ...getMetadataArgsStorage().tables.map(tbl => tbl.target),
+    TagEntity,
+    UserEntity,
   ],
   migrations: [join(__dirname, './migrations/**/*{.ts, .js}')],
   cli: {
@@ -31,8 +33,9 @@ const ormconfig: ConnectionOptions = {
 };
 
 // if (isDevelopment) {
-console.log('Mode:', getEnvFieldValue(EnvFields.MODE));
+console.log('Mode:', getEnvFieldValue(EnvFields.NODE_ENV));
 console.log('Config: ', ormconfig);
+
 // }
 
 export default ormconfig;
