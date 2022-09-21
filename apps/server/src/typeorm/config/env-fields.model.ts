@@ -9,4 +9,5 @@ export enum EnvFields {
   HOST = 'HOST',
   PORT = 'PORT',
   NODE_ENV = 'NODE_ENV',
+  SECRET_KEY = 'SECRET_KEY',
 }

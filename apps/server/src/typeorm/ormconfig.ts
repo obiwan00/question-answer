@@ -5,12 +5,23 @@ import { getEnvFieldValue } from '@qa/server/typeorm/config/get-env-value.util';
 import { UserEntity } from '@qa/server/user/user.entity';
 import * as dotenv from 'dotenv';
 import { join } from 'path';
-import { ConnectionOptions, getMetadataArgsStorage } from "typeorm";
+import { ConnectionOptions } from "typeorm";
 
 
 dotenv.config();
 
-ensureObjectValues(process.env, (Object).keys(EnvFields));
+ensureObjectValues(process.env, [
+  EnvFields.POSTGRES_HOST,
+  EnvFields.POSTGRES_PORT,
+  EnvFields.POSTGRES_USER,
+  EnvFields.POSTGRES_PASSWORD,
+  EnvFields.POSTGRES_DATABASE,
+  EnvFields.RUN_MIGRATIONS,
+  EnvFields.HOST,
+  EnvFields.PORT,
+  EnvFields.NODE_ENV,
+  EnvFields.SECRET_KEY,
+]);
 const isDevelopment = getEnvFieldValue(EnvFields.NODE_ENV) === 'development';
 
 const ormconfig: ConnectionOptions = {
@@ -35,7 +46,6 @@ const ormconfig: ConnectionOptions = {
 // if (isDevelopment) {
 console.log('Mode:', getEnvFieldValue(EnvFields.NODE_ENV));
 console.log('Config: ', ormconfig);
-
 // }
 
 export default ormconfig;
