@@ -16,7 +16,7 @@
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
-      "@qa/api-interfaces": ["libs/api-interfaces/src/"],
+      "@qa/api-interfaces": ["libs/api-interfaces/"],
       "@qa/client/*": ["apps/client/src/*"],
       "@qa/server/*": ["apps/server/src/*"]
     }

@@ -1,4 +1,5 @@
 import { TagEntity } from '@qa/server/tag/tag.entity';
+import { TopicEntity } from '@qa/server/topic/topic.entity';
 import { ensureObjectValues } from '@qa/server/typeorm/config/ensure-values.util';
 import { EnvFields } from '@qa/server/typeorm/config/env-fields.model';
 import { getEnvFieldValue } from '@qa/server/typeorm/config/get-env-value.util';
@@ -36,6 +37,7 @@ const ormconfig: ConnectionOptions = {
   entities: [
     TagEntity,
     UserEntity,
+    TopicEntity,
   ],
   migrations: [join(__dirname, './migrations/**/*{.ts, .js}')],
   cli: {

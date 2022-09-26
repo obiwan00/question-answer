@@ -6,7 +6,6 @@ import { AuthGuard } from '@qa/server/user/guards/user.guard';
 import { UserEntity } from '@qa/server/user/user.entity';
 import { UserService } from '@qa/server/user/user.service';
 
-// TODO: move token setting to HTTP only cookies
 
 @ApiTags('user')
 @Controller()

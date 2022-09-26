@@ -8,6 +8,7 @@ import { TagService } from "@qa/server/tag/tag.service";
   imports: [TypeOrmModule.forFeature([TagEntity])],
   controllers: [TagController],
   providers: [TagService],
+  exports: [TagService],
 })
 export class TagModule {
 }

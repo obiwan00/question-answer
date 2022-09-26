@@ -1,9 +1,9 @@
+import { TopicEntity } from "@qa/server/topic/topic.entity";
 import { getHashedString } from "@qa/server/user/utils/hash-string.util";
-import { User } from "libs/api-interfaces/src";
-import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'users' })
-export class UserEntity implements User {
+export class UserEntity {
   @PrimaryGeneratedColumn('increment')
   public id: number;
 
@@ -27,8 +27,11 @@ export class UserEntity implements User {
   }
 
   @CreateDateColumn({ select: false, name: 'create_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
-  public createdAt: string;
+  public createdAt: Date;
 
   @UpdateDateColumn({ select: false, name: 'updated_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
-  public updatedAt: string;
+  public updatedAt: Date;
+
+  @OneToMany(() => TopicEntity, (topic) => topic.author)
+  public topics: TopicEntity[];
 }
