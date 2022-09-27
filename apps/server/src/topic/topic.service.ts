@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TagService } from '@qa/server/tag/tag.service';
 import { CreateTopicDto, TopicResponseDto } from '@qa/server/topic/dto/topic.dto';
 import { TopicEntity } from '@qa/server/topic/topic.entity';
 import { UserEntity } from '@qa/server/user/user.entity';
 import slugify from "slugify";
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 
 @Injectable()
 export class TopicService {
@@ -44,5 +44,21 @@ export class TopicService {
     return this.topicRepository.findOne({
       where: { slug },
     });
+  }
+
+  public async deleteTopicBySlug(currentUserId: number, slug: string): Promise<DeleteResult> {
+    const topicToDelete = await this.topicRepository.findOne({
+      where: { slug },
+    });
+
+    if (!topicToDelete) {
+      throw new HttpException("There is no such topic", HttpStatus.NOT_FOUND);
+    }
+
+    if (topicToDelete.author.id !== currentUserId) {
+      throw new HttpException("You don't have rights to delete this article", HttpStatus.FORBIDDEN);
+    }
+
+    return await this.topicRepository.delete(topicToDelete);
   }
 }

@@ -16,7 +16,7 @@ export class TopicEntity {
   @Column()
   public body: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.topics)
+  @ManyToOne(() => UserEntity, (user) => user.topics, { eager: true })
   public author: UserEntity;
 
   @ManyToMany(() => TagEntity, (tag) => tag.name, { cascade: true })
