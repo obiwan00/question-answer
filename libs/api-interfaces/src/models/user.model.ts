@@ -1,7 +1,11 @@
-export interface UserResponse {
+
+export interface User {
   id: number;
   username: string;
   email: string;
+}
+
+export interface UserAuthResponse extends User {
   token: string;
 }
 

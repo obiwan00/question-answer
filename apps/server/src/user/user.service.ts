@@ -6,7 +6,7 @@ import { UserEntity } from '@qa/server/user/user.entity';
 import { getHashedString } from '@qa/server/user/utils/hash-string.util';
 import { sign } from 'jsonwebtoken';
 import { Repository } from 'typeorm';
-import { CreateUserDto, LoginUserDto, UpdateUserDto, UserResponseDto } from './dto/user.dto';
+import { CreateUserDto, LoginUserDto, UpdateUserDto, UserAuthResponseDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -34,7 +34,7 @@ export class UserService {
     return this.userRepository.save(newUser);
   }
 
-  public buildCreateUserResponse(user: UserEntity): UserResponseDto {
+  public buildCreateUserResponse(user: UserEntity): UserAuthResponseDto {
     return {
       id: user.id,
       username: user.username,

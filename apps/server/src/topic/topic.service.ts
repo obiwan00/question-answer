@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TagEntity } from '@qa/server/tag/tag.entity';
 import { TagService } from '@qa/server/tag/tag.service';
-import { CreateTopicDto } from '@qa/server/topic/dto/topic.dto';
+import { CreateTopicDto, TopicResponseDto } from '@qa/server/topic/dto/topic.dto';
 import { TopicEntity } from '@qa/server/topic/topic.entity';
 import { UserEntity } from '@qa/server/user/user.entity';
-import { TopicResponse } from 'libs/api-interfaces';
 import slugify from "slugify";
 import { Repository } from 'typeorm';
 
@@ -14,7 +12,7 @@ export class TopicService {
 
   public constructor(
     @InjectRepository(TopicEntity)
-    private readonly topicRepository: Repository<UserEntity>,
+    private readonly topicRepository: Repository<TopicEntity>,
     private tagService: TagService,
   ) { }
 
@@ -29,7 +27,7 @@ export class TopicService {
     return this.topicRepository.save(newTopic);
   }
 
-  public buildTopicResponse(topic: TopicEntity): TopicResponse {
+  public buildTopicResponse(topic: TopicEntity): TopicResponseDto {
     return {
       ...topic,
       tags: topic?.tags?.map(({ name }) => name),
@@ -40,5 +38,11 @@ export class TopicService {
     const uniquePostfix = (Math.random() * Math.pow(36, 6) | 0);
     const slug = slugify(string, { lower: true });
     return `${slug}-${uniquePostfix}`;
+  }
+
+  public async findTopicBySlug(slug: string): Promise<TopicEntity> {
+    return this.topicRepository.findOne({
+      where: { slug },
+    });
   }
 }
