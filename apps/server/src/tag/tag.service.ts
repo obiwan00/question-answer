@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { TagResponseDto } from "@qa/server/tag/dto/tag.dto";
 import { TagEntity } from "@qa/server/tag/tag.entity";
-import { TagResponse } from "libs/api-interfaces";
 import { Repository } from "typeorm";
 
 @Injectable()
@@ -27,7 +27,7 @@ export class TagService {
     });
   }
 
-  public buildTagResponse(tags: TagEntity[]): TagResponse {
+  public buildTagResponse(tags: TagEntity[]): TagResponseDto {
     return {
       tags: tags.map(({ name }) => name),
     };

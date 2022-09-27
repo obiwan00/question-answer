@@ -1,6 +1,6 @@
 import { Controller, Get } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
-import { TagResponse } from "libs/api-interfaces";
+import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger";
+import { TagResponseDto } from "@qa/server/tag/dto/tag.dto";
 import { TagService } from "@qa/server/tag/tag.service";
 
 @ApiTags('tags')
@@ -11,7 +11,8 @@ export class TagController {
   }
 
   @Get()
-  public async getTags(): Promise<TagResponse> {
+  @ApiCreatedResponse({ type: TagResponseDto })
+  public async getTags(): Promise<TagResponseDto> {
     const tags = await this.tagService.findAll();
     return this.tagService.buildTagResponse(tags);
   }
