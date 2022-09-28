@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { CreateTopicDto, TopicResponseDto } from '@qa/server/topic/dto/topic.dto';
+import { CreateTopicDto, TopicResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
 import { TopicService } from '@qa/server/topic/topic.service';
 import { User } from '@qa/server/user/decorators/user.decorator';
 import { AuthGuard } from '@qa/server/user/guards/user.guard';
@@ -33,6 +33,17 @@ export class TopicController {
   @UseGuards(AuthGuard)
   public async deleteTopicBySlug(@User('id') currentUserId: number, @Param('slug') slug: string): Promise<DeleteResult> {
     return await this.topicService.deleteTopicBySlug(currentUserId, slug);
+  }
+
+  @Put(':slug')
+  @UseGuards(AuthGuard)
+  public async updateTopicBySlug(
+    @User('id') currentUserId: number,
+    @Param('slug') slug: string,
+    @Body() updateTopicDto: UpdateTopicDto,
+  ): Promise<TopicResponseDto> {
+    const topic = await this.topicService.updateTopicBySlug(currentUserId, slug, updateTopicDto);
+    return this.topicService.buildTopicResponse(topic);
   }
 
 }

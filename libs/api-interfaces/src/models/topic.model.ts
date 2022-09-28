@@ -14,5 +14,8 @@ export interface TopicResponse {
 export interface CreateTopic {
   title: string;
   body: string;
-  tags?: string[];
+  tags: string[];
+}
+
+export interface UpdateTopic extends CreateTopic {
 }

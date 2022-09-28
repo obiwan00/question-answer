@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { UserResponseDto } from "@qa/server/user/dto/user.dto";
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { CreateTopic, TopicResponse, User } from "libs/api-interfaces";
+import { IsArray, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { CreateTopic, TopicResponse, UpdateTopic, UserResponse } from "libs/api-interfaces";
 
 export class CreateTopicDto implements CreateTopic {
   @ApiProperty()
@@ -15,8 +15,12 @@ export class CreateTopicDto implements CreateTopic {
   public body: string;
 
   @ApiProperty()
-  @IsOptional()
-  public tags?: string[];
+  @IsArray()
+  @IsString({ each: true })
+  public tags: string[];
+}
+
+export class UpdateTopicDto extends CreateTopicDto implements UpdateTopic {
 }
 
 export class TopicResponseDto implements TopicResponse {
