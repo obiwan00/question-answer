@@ -19,7 +19,7 @@ export class TopicEntity {
   @ManyToOne(() => UserEntity, (user) => user.topics, { eager: true })
   public author: UserEntity;
 
-  @ManyToMany(() => TagEntity, (tag) => tag.name, { cascade: true })
+  @ManyToMany(() => TagEntity, (tag) => tag.name, { cascade: true, eager: true })
   @JoinTable()
   public tags: TagEntity[];
 

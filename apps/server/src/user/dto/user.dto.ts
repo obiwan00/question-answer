@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { CreateUser, LoginUser, UpdateUser, User, UserAuthResponse } from "libs/api-interfaces";
+import { CreateUser, LoginUser, UpdateUser, UserResponse, UserAuthResponse } from "libs/api-interfaces";
 
 export class CreateUserDto implements CreateUser {
   @ApiProperty()
@@ -46,7 +46,7 @@ export class UpdateUserDto implements UpdateUser {
   public readonly email: string;
 }
 
-export class UserResponseDto implements User {
+export class UserResponseDto implements UserResponse {
   @ApiProperty()
   public readonly id: number;
 
