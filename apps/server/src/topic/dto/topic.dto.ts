@@ -31,6 +31,9 @@ export class TopicResponseDto implements TopicResponse {
   slug: string;
 
   @ApiProperty()
+  likesCount: number;
+
+  @ApiProperty()
   title: string;
 
   @ApiProperty()

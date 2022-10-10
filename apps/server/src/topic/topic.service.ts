@@ -14,6 +14,8 @@ export class TopicService {
   public constructor(
     @InjectRepository(TopicEntity)
     private readonly topicRepository: Repository<TopicEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     private tagService: TagService,
   ) { }
 
@@ -82,9 +84,15 @@ export class TopicService {
   }
 
   public async findTopicBySlug(slug: string): Promise<TopicEntity> {
-    return this.topicRepository.findOne({
+    const topicBySlug = await this.topicRepository.findOne({
       where: { slug },
     });
+
+    if (!topicBySlug) {
+      throw new HttpException("There is no such topic", HttpStatus.NOT_FOUND);
+    }
+
+    return topicBySlug;
   }
 
   public async deleteTopicBySlug(currentUserId: number, slug: string): Promise<DeleteResult> {
@@ -120,5 +128,31 @@ export class TopicService {
     topicToUpdate.tags = this.tagService.getTagEntitiesByNames(updateTopicDto.tags);
 
     return await this.topicRepository.save(topicToUpdate);
+  }
+
+  public async likeTopicBySlug(currentUserId: number, slug: string): Promise<TopicEntity> {
+    const topicForInteraction = await this.findTopicBySlug(slug);
+    const currentUser = await this.userRepository.findOne({
+      where: { id: currentUserId },
+      relations: ['likes', 'dislikes'],
+    });
+
+    const isAlreadyLikedTopicIndex = currentUser.likes.findIndex((likedTopic) => likedTopic.id === topicForInteraction.id)
+    if (isAlreadyLikedTopicIndex !== -1) {
+      currentUser.likes.splice(isAlreadyLikedTopicIndex, 1);
+      topicForInteraction.likesCount--;
+    } else {
+      currentUser.likes.push(topicForInteraction);
+      topicForInteraction.likesCount++;
+
+      const isAlreadyDislikedTopicIndex = currentUser.dislikes.findIndex((dislikedTopic) => dislikedTopic.id === topicForInteraction.id)
+      if (isAlreadyDislikedTopicIndex) {
+        currentUser.dislikes.splice(isAlreadyDislikedTopicIndex, 1);
+      }
+    }
+
+    await this.userRepository.save(currentUser);
+    await this.topicRepository.save(topicForInteraction);
+    return topicForInteraction;
   }
 }

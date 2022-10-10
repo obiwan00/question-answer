@@ -16,12 +16,21 @@ export class TopicEntity {
   @Column()
   public body: string;
 
+  @Column({ default: 0 })
+  public likesCount: number;
+
   @ManyToOne(() => UserEntity, (user) => user.topics, { eager: true })
   public author: UserEntity;
 
   @ManyToMany(() => TagEntity, (tag) => tag.name, { cascade: true, eager: true })
   @JoinTable()
   public tags: TagEntity[];
+
+  @ManyToMany(() => UserEntity)
+  public likes: UserEntity[];
+
+  @ManyToMany(() => UserEntity)
+  public dislikes: UserEntity[];
 
   @CreateDateColumn({ name: 'created_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   public createdAt: Date;

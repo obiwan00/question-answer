@@ -1,6 +1,6 @@
 import { TopicEntity } from "@qa/server/topic/topic.entity";
 import { getHashedString } from "@qa/server/user/utils/hash-string.util";
-import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -34,4 +34,12 @@ export class UserEntity {
 
   @OneToMany(() => TopicEntity, (topic) => topic.author)
   public topics: TopicEntity[];
+
+  @ManyToMany(() => TopicEntity, (topic) => topic.likes)
+  @JoinTable()
+  public likes: TopicEntity[];
+
+  @ManyToMany(() => TopicEntity, (topic) => topic.dislikes)
+  @JoinTable()
+  public dislikes: TopicEntity[];
 }

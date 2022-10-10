@@ -10,6 +10,7 @@ export interface TopicsRequest {
 export interface TopicResponse {
   id: number;
   slug: string;
+  likesCount: number;
   title: string;
   body: string;
   tags?: string[];

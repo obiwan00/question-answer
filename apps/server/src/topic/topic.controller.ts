@@ -57,4 +57,13 @@ export class TopicController {
     return this.topicService.buildTopicResponse(topic);
   }
 
+  @Post(':slug/like')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ type: TopicResponseDto })
+  public async likeTopicBySlug(@User('id') currentUserId: number, @Param('slug') slug: string): Promise<TopicResponseDto> {
+    const likedTopic = await this.topicService.likeTopicBySlug(currentUserId, slug);
+    return this.topicService.buildTopicResponse(likedTopic);
+  }
+
 }
