@@ -1,11 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TagService } from '@qa/server/tag/tag.service';
-import { CreateTopicDto, TopicResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
+import { CreateTopicDto, TopicResponseDto, TopicsResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
 import { TopicEntity } from '@qa/server/topic/topic.entity';
 import { UserEntity } from '@qa/server/user/user.entity';
+import { TopicsRequest } from 'libs/api-interfaces';
 import slugify from "slugify";
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, getRepository, In, Repository } from 'typeorm';
 
 @Injectable()
 export class TopicService {
@@ -16,6 +17,47 @@ export class TopicService {
     private tagService: TagService,
   ) { }
 
+  public async findAll(query: TopicsRequest): Promise<TopicsResponseDto> {
+    let { offset, limit } = query;
+    offset = typeof query.offset === 'string' ? parseInt(query.offset, 10) : 0;
+    limit = typeof query.limit === 'string' ? parseInt(query.limit, 10) : 0;
+
+    const queryBuilder = getRepository(TopicEntity)
+      .createQueryBuilder('topics')
+      .select('topics.id')
+      .leftJoin('topics.author', 'users')
+      .leftJoin('topics.tags', 'tags');
+
+
+    if (query.search) {
+      queryBuilder.andWhere('topics.title LIKE :search', { search: `%${query.search}%` });
+    }
+
+    if (query.tags) {
+      const tags = Array.isArray(query.tags) ? query.tags : [query.tags];
+
+      queryBuilder.andWhere(`tags.name IN (:...tags) `, { tags })
+        .groupBy('topics.id')
+        .having('count(*) = :tagsCount', { tagsCount: tags.length });
+    }
+
+    const selectedTopicsIds = await queryBuilder.getMany();
+
+    const topics = await this.topicRepository.find({
+      where: { id: In(selectedTopicsIds.map(({ id }) => id)) },
+      take: limit,
+      skip: offset,
+      order: { 'updatedAt': 'DESC' },
+    });
+
+    return {
+      count: selectedTopicsIds.length,
+      offset,
+      limit,
+      topics: topics.map(topic => this.buildTopicResponse(topic)),
+    };
+  }
+
   public async create(currentUser: UserEntity, createTopicDto: CreateTopicDto): Promise<TopicEntity> {
     const newTopic = new TopicEntity();
     Object.assign(newTopic, createTopicDto);
@@ -23,7 +65,6 @@ export class TopicService {
     newTopic.slug = this.getSlug(createTopicDto.title);
     newTopic.tags = this.tagService.getTagEntitiesByNames(createTopicDto.tags);
 
-    console.log(newTopic);
     return this.topicRepository.save(newTopic);
   }
 

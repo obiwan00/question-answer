@@ -1,5 +1,12 @@
 import { UserResponse } from "libs/api-interfaces/src/models/user.model";
 
+export interface TopicsRequest {
+  offset: number;
+  limit: number;
+  tags: string[];
+  search: string;
+}
+
 export interface TopicResponse {
   id: number;
   slug: string;

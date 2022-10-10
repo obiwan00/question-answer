@@ -23,9 +23,9 @@ export class TopicEntity {
   @JoinTable()
   public tags: TagEntity[];
 
-  @CreateDateColumn({ select: false, name: 'create_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
+  @CreateDateColumn({ name: 'created_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   public createdAt: Date;
 
-  @UpdateDateColumn({ select: false, name: 'updated_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
+  @UpdateDateColumn({ name: 'updated_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
   public updatedAt: Date;
 }

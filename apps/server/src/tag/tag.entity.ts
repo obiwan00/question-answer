@@ -12,7 +12,7 @@ export class TagEntity {
   public topics: TopicEntity[];
 
   @Exclude()
-  @CreateDateColumn({ name: 'create_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
+  @CreateDateColumn({ name: 'created_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   public createdAt: string;
 
   @Exclude()

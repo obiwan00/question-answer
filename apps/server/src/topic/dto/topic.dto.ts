@@ -48,3 +48,17 @@ export class TopicResponseDto implements TopicResponse {
   @ApiProperty()
   updatedAt: Date;
 }
+
+export class TopicsResponseDto {
+  @ApiProperty({ isArray: true, type: TopicResponseDto })
+  topics: TopicResponseDto[];
+
+  @ApiProperty()
+  count: number;
+
+  @ApiProperty()
+  limit: number;
+
+  @ApiProperty()
+  offset: number;
+}

@@ -26,7 +26,7 @@ export class UserEntity {
     this.salt = salt;
   }
 
-  @CreateDateColumn({ select: false, name: 'create_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
+  @CreateDateColumn({ select: false, name: 'created_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   public createdAt: Date;
 
   @UpdateDateColumn({ select: false, name: 'updated_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })

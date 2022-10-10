@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@qa/server/user/decorators/user.decorator';
 import { CreateUserDto, LoginUserDto, UpdateUserDto, UserAuthResponseDto } from '@qa/server/user/dto/user.dto';
 import { AuthGuard } from '@qa/server/user/guards/user.guard';
@@ -29,15 +29,17 @@ export class UserController {
   }
 
   @Get('user')
-  @ApiCreatedResponse({ type: UserAuthResponseDto })
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ type: UserAuthResponseDto })
   public async currentUser(@User() user: UserEntity): Promise<UserAuthResponseDto> {
     return this.userService.buildCreateUserResponse(user);
   }
 
   @Put('user')
-  @ApiCreatedResponse({ type: UserAuthResponseDto })
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ type: UserAuthResponseDto })
   public async updateCurrentUser(@User() user: UserEntity, @Body() updateUserDto: UpdateUserDto): Promise<UserAuthResponseDto> {
     const updatedUser = await this.userService.update(user.id, updateUserDto);
     return this.userService.buildCreateUserResponse(updatedUser);
