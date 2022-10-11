@@ -141,8 +141,37 @@ export class TopicService {
       topicForInteraction.likesCount++;
 
       const isAlreadyDislikedTopicIndex = currentUser.dislikes.findIndex((dislikedTopic) => dislikedTopic.id === topicForInteraction.id)
-      if (isAlreadyDislikedTopicIndex) {
+      if (isAlreadyDislikedTopicIndex !== -1) {
         currentUser.dislikes.splice(isAlreadyDislikedTopicIndex, 1);
+        topicForInteraction.likesCount++;
+      }
+    }
+
+    await this.userRepository.save(currentUser);
+    await this.topicRepository.save(topicForInteraction);
+    return topicForInteraction;
+  }
+
+  public async dislikeTopicBySlug(currentUserId: number, slug: string): Promise<TopicEntity> {
+    const topicForInteraction = await this.findTopicBySlug(slug);
+    const currentUser = await this.userRepository.findOne({
+      where: { id: currentUserId },
+      relations: ['likes', 'dislikes'],
+    });
+
+
+    const isAlreadyDislikedTopicIndex = currentUser.dislikes.findIndex((dislikedTopic) => dislikedTopic.id === topicForInteraction.id)
+    if (isAlreadyDislikedTopicIndex !== -1) {
+      currentUser.dislikes.splice(isAlreadyDislikedTopicIndex, 1);
+      topicForInteraction.likesCount++;
+    } else {
+      currentUser.dislikes.push(topicForInteraction);
+      topicForInteraction.likesCount--;
+
+      const isAlreadyLikedTopicIndex = currentUser.likes.findIndex((likedTopic) => likedTopic.id === topicForInteraction.id)
+      if (isAlreadyLikedTopicIndex !== -1) {
+        currentUser.likes.splice(isAlreadyLikedTopicIndex, 1);
+        topicForInteraction.likesCount--;
       }
     }
 

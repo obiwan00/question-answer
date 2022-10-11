@@ -66,4 +66,13 @@ export class TopicController {
     return this.topicService.buildTopicResponse(likedTopic);
   }
 
+  @Post(':slug/dislike')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ type: TopicResponseDto })
+  public async dislikeTopicBySlug(@User('id') currentUserId: number, @Param('slug') slug: string): Promise<TopicResponseDto> {
+    const likedTopic = await this.topicService.dislikeTopicBySlug(currentUserId, slug);
+    return this.topicService.buildTopicResponse(likedTopic);
+  }
+
 }
