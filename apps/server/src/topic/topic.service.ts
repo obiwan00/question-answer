@@ -96,18 +96,13 @@ export class TopicService {
   }
 
   public async deleteTopicBySlug(currentUserId: number, slug: string): Promise<DeleteResult> {
-    const topicToDelete = await this.topicRepository.findOne({
-      where: { slug },
-    });
-
-    if (!topicToDelete) {
-      throw new HttpException("There is no such topic", HttpStatus.NOT_FOUND);
-    }
+    const topicToDelete = await this.findTopicBySlug(slug);
 
     if (topicToDelete.author.id !== currentUserId) {
       throw new HttpException("You don't have rights to delete this article", HttpStatus.FORBIDDEN);
     }
 
+    // TODO: fix delete
     return await this.topicRepository.delete(topicToDelete);
   }
 
