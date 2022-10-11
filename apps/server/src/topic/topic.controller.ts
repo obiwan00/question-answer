@@ -17,8 +17,8 @@ export class TopicController {
 
   @Get()
   @ApiCreatedResponse({ type: TopicsResponseDto })
-  public async findAll(@Query() query: TopicsRequest): Promise<TopicsResponseDto> {
-    return await this.topicService.findAll(query);
+  public async findAll(@Query() query: TopicsRequest, @User('id') currentUserId?: number): Promise<TopicsResponseDto> {
+    return await this.topicService.findAll(query, currentUserId);
   }
 
   @Post()
@@ -27,14 +27,14 @@ export class TopicController {
   @ApiCreatedResponse({ type: TopicResponseDto })
   public async create(@User() currentUser: UserEntity, @Body() createTopicDto: CreateTopicDto): Promise<TopicResponseDto> {
     const topic = await this.topicService.create(currentUser, createTopicDto);
-    return this.topicService.buildTopicResponse(topic);
+    return this.topicService.buildTopicResponse({ topic, currentUserId: currentUser.id });
   }
 
   @Get(':slug')
   @ApiCreatedResponse({ type: TopicResponseDto })
-  public async getTopicBySlug(@Param('slug') slug: string): Promise<TopicResponseDto> {
+  public async getTopicBySlug(@Param('slug') slug: string, @User('id') currentUserId?: number): Promise<TopicResponseDto> {
     const topic = await this.topicService.findTopicBySlug(slug);
-    return this.topicService.buildTopicResponse(topic);
+    return await this.topicService.buildTopicResponse({ topic, currentUserId });
   }
 
   @Delete(':slug')
@@ -54,7 +54,7 @@ export class TopicController {
     @Body() updateTopicDto: UpdateTopicDto,
   ): Promise<TopicResponseDto> {
     const topic = await this.topicService.updateTopicBySlug(currentUserId, slug, updateTopicDto);
-    return this.topicService.buildTopicResponse(topic);
+    return this.topicService.buildTopicResponse({ topic, currentUserId });
   }
 
   @Post(':slug/like')
@@ -63,7 +63,7 @@ export class TopicController {
   @ApiCreatedResponse({ type: TopicResponseDto })
   public async likeTopicBySlug(@User('id') currentUserId: number, @Param('slug') slug: string): Promise<TopicResponseDto> {
     const likedTopic = await this.topicService.likeTopicBySlug(currentUserId, slug);
-    return this.topicService.buildTopicResponse(likedTopic);
+    return this.topicService.buildTopicResponse({ topic: likedTopic, currentUserId });
   }
 
   @Post(':slug/dislike')
@@ -71,8 +71,8 @@ export class TopicController {
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: TopicResponseDto })
   public async dislikeTopicBySlug(@User('id') currentUserId: number, @Param('slug') slug: string): Promise<TopicResponseDto> {
-    const likedTopic = await this.topicService.dislikeTopicBySlug(currentUserId, slug);
-    return this.topicService.buildTopicResponse(likedTopic);
+    const dislikedTopic = await this.topicService.dislikeTopicBySlug(currentUserId, slug);
+    return this.topicService.buildTopicResponse({ topic: dislikedTopic, currentUserId });
   }
 
 }

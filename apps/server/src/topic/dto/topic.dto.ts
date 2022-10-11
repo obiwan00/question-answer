@@ -1,7 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { UserResponseDto } from "@qa/server/user/dto/user.dto";
 import { IsArray, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { CreateTopic, TopicResponse, UpdateTopic, UserResponse } from "libs/api-interfaces";
+import { CreateTopic, LikeStatus, TopicResponse, TopicWithLikeStatusResponse, UpdateTopic, UserResponse } from "libs/api-interfaces";
 
 export class CreateTopicDto implements CreateTopic {
   @ApiProperty()
@@ -40,7 +40,7 @@ export class TopicResponseDto implements TopicResponse {
   body: string;
 
   @ApiProperty()
-  tags?: string[];
+  tags: string[];
 
   @ApiProperty()
   author: UserResponseDto;
@@ -50,6 +50,10 @@ export class TopicResponseDto implements TopicResponse {
 
   @ApiProperty()
   updatedAt: Date;
+
+  @ApiProperty({ enum: LikeStatus })
+  @ApiPropertyOptional()
+  likeStatus?: LikeStatus;
 }
 
 export class TopicsResponseDto {

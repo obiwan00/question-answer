@@ -100,4 +100,11 @@ export class UserService {
     Object.assign(user, updateUserDto);
     return await this.userRepository.save(user);
   }
+
+  public async getUserByIdWithLikeStatus(currentUserId: number): Promise<UserEntity> {
+    return await this.userRepository.findOne({
+      where: { id: currentUserId },
+      relations: ['likes', 'dislikes'],
+    });
+  }
 }

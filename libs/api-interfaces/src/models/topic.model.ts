@@ -19,6 +19,16 @@ export interface TopicResponse {
   updatedAt: Date;
 }
 
+export enum LikeStatus {
+  DISLIKED = 'DISLIKED',
+  NEUTRAL = 'NEUTRAL',
+  LIKED = 'LIKED',
+}
+
+export interface TopicWithLikeStatusResponse extends TopicResponse {
+  likeStatus: LikeStatus;
+}
+
 export interface CreateTopic {
   title: string;
   body: string;

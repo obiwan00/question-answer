@@ -4,7 +4,8 @@ import { TagService } from '@qa/server/tag/tag.service';
 import { CreateTopicDto, TopicResponseDto, TopicsResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
 import { TopicEntity } from '@qa/server/topic/topic.entity';
 import { UserEntity } from '@qa/server/user/user.entity';
-import { TopicsRequest } from 'libs/api-interfaces';
+import { UserService } from '@qa/server/user/user.service';
+import { LikeStatus, TopicsRequest, TopicWithLikeStatusResponse } from 'libs/api-interfaces';
 import slugify from "slugify";
 import { DeleteResult, getRepository, In, Repository } from 'typeorm';
 
@@ -16,10 +17,11 @@ export class TopicService {
     private readonly topicRepository: Repository<TopicEntity>,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private userService: UserService,
     private tagService: TagService,
   ) { }
 
-  public async findAll(query: TopicsRequest): Promise<TopicsResponseDto> {
+  public async findAll(query: TopicsRequest, currentUserId?: number): Promise<TopicsResponseDto> {
     let { offset, limit } = query;
     offset = typeof query.offset === 'string' ? parseInt(query.offset, 10) : 0;
     limit = typeof query.limit === 'string' ? parseInt(query.limit, 10) : 0;
@@ -52,11 +54,13 @@ export class TopicService {
       order: { 'updatedAt': 'DESC' },
     });
 
+    const currentUserWithLikeStatus = await this.userService.getUserByIdWithLikeStatus(currentUserId);
+
     return {
       count: selectedTopicsIds.length,
       offset,
       limit,
-      topics: topics.map(topic => this.buildTopicResponse(topic)),
+      topics: await Promise.all(topics.map(topic => this.buildTopicResponse({ topic, currentUserWithLikeStatus }))),
     };
   }
 
@@ -70,10 +74,37 @@ export class TopicService {
     return this.topicRepository.save(newTopic);
   }
 
-  public buildTopicResponse(topic: TopicEntity): TopicResponseDto {
+  public async buildTopicResponse({ topic, currentUserId, currentUserWithLikeStatus }: {
+    topic: TopicEntity,
+    currentUserId?: number,
+    currentUserWithLikeStatus?: UserEntity,
+  } = {
+      topic: null,
+      currentUserId: null,
+      currentUserWithLikeStatus: null,
+    }
+  ): Promise<TopicResponseDto> {
+    let likeStatus = LikeStatus.NEUTRAL;
+
+    currentUserWithLikeStatus = currentUserWithLikeStatus || await this.userService.getUserByIdWithLikeStatus(currentUserId);
+
+    if (currentUserWithLikeStatus) {
+      const isTopicLiked = currentUserWithLikeStatus.likes
+        .find(({ id: likedTopicId }) => likedTopicId === topic.id);
+      const isTopicDisliked = currentUserWithLikeStatus.dislikes
+        .find(({ id: dislikedTopicId }) => dislikedTopicId === topic.id);
+
+      if (isTopicLiked) {
+        likeStatus = LikeStatus.LIKED;
+      } else if (isTopicDisliked) {
+        likeStatus = LikeStatus.DISLIKED;
+      }
+    }
+
     return {
       ...topic,
       tags: topic?.tags?.map(({ name }) => name),
+      likeStatus,
     };
   }
 
@@ -127,10 +158,7 @@ export class TopicService {
 
   public async likeTopicBySlug(currentUserId: number, slug: string): Promise<TopicEntity> {
     const topicForInteraction = await this.findTopicBySlug(slug);
-    const currentUser = await this.userRepository.findOne({
-      where: { id: currentUserId },
-      relations: ['likes', 'dislikes'],
-    });
+    const currentUser = await this.userService.getUserByIdWithLikeStatus(currentUserId);
 
     const isAlreadyLikedTopicIndex = currentUser.likes.findIndex((likedTopic) => likedTopic.id === topicForInteraction.id)
     if (isAlreadyLikedTopicIndex !== -1) {
@@ -154,11 +182,7 @@ export class TopicService {
 
   public async dislikeTopicBySlug(currentUserId: number, slug: string): Promise<TopicEntity> {
     const topicForInteraction = await this.findTopicBySlug(slug);
-    const currentUser = await this.userRepository.findOne({
-      where: { id: currentUserId },
-      relations: ['likes', 'dislikes'],
-    });
-
+    const currentUser = await this.userService.getUserByIdWithLikeStatus(currentUserId);
 
     const isAlreadyDislikedTopicIndex = currentUser.dislikes.findIndex((dislikedTopic) => dislikedTopic.id === topicForInteraction.id)
     if (isAlreadyDislikedTopicIndex !== -1) {

@@ -1,6 +1,6 @@
 import { TopicEntity } from "@qa/server/topic/topic.entity";
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Exclude } from 'class-transformer';
+import { CreateDateColumn, Entity, ManyToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'tags' })
 export class TagEntity {
