@@ -68,6 +68,7 @@ Run `ng g component my-component --project=my-app` to generate a new component.
 Create migration: `yarn db:create -n migration-file-name`.\
 Run migration: `yarn db:migrate`.\
 Drop DB: `yarn db:drop`.
+Run seeding of DB: `yarn db:seed`.
 
 ## Build
 

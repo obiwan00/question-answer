@@ -56,6 +56,9 @@ export class TopicService {
 
     const currentUserWithLikeStatus = await this.userService.getUserByIdWithLikeStatus(currentUserId);
 
+    console.log(currentUserWithLikeStatus);
+
+
     return {
       count: selectedTopicsIds.length,
       offset,

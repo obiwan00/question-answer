@@ -12,7 +12,8 @@
     "typeorm": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register --project ./tsconfig.base.json -O '{\"module\":\"commonjs\"}' ./node_modules/typeorm/cli.js --config ./apps/server/src/typeorm/ormconfig.ts",
     "db:drop": "yarn typeorm schema:drop",
     "db:create": "yarn typeorm migration:generate",
-    "db:migrate": "yarn typeorm migration:run"
+    "db:migrate": "yarn typeorm migration:run",
+    "db:seed": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register --project ./tsconfig.base.json -O '{\"module\":\"commonjs\"}' ./node_modules/typeorm/cli.js --config ./apps/server/src/typeorm/ormseedconfig.ts migration:run"
   },
   "private": true,
   "dependencies": {
