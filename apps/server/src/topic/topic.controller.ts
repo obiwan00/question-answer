@@ -66,7 +66,7 @@ export class TopicController {
     return this.topicService.buildTopicResponse({ topic: likedTopic, currentUserId });
   }
 
-  @Post(':slug/dislike')
+  @Delete(':slug/like')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: TopicResponseDto })
