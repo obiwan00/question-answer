@@ -1,3 +1,4 @@
+import { AnswerResponse } from "libs/api-interfaces/src/models/answer.model";
 import { UserResponse } from "libs/api-interfaces/src/models/user.model";
 
 export interface TopicsRequest {
@@ -13,10 +14,15 @@ export interface TopicResponse {
   likesCount: number;
   title: string;
   body: string;
-  tags?: string[];
   author: UserResponse;
   createdAt: Date;
   updatedAt: Date;
+  likeStatus?: LikeStatus;
+  tags?: string[];
+}
+
+export interface TopicWithAnswerResponse extends TopicResponse {
+  answers: AnswerResponse[];
 }
 
 export enum LikeStatus {

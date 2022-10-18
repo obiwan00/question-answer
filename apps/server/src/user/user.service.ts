@@ -101,10 +101,17 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  public async getUserByIdWithLikeStatus(currentUserId: number): Promise<UserEntity> {
+  public async getUserByIdWithTopicLikeStatus(currentUserId: number): Promise<UserEntity> {
     return await this.userRepository.findOne({
       where: { id: currentUserId },
-      relations: ['likes', 'dislikes'],
+      relations: ['topicLikes', 'topicDislikes'],
+    });
+  }
+
+  public async getUserByIdWithAnswerLikeStatus(currentUserId: number): Promise<UserEntity> {
+    return await this.userRepository.findOne({
+      where: { id: currentUserId },
+      relations: ['answerLikes', 'answerDislikes'],
     });
   }
 }

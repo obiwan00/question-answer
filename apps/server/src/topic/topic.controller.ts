@@ -1,11 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { CreateTopicDto, TopicResponseDto, TopicsResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
+import { CreateTopicDto, TopicResponseDto, TopicsResponseDto, TopicWithAnswerResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
+import { TopicEntity } from '@qa/server/topic/topic.entity';
 import { TopicService } from '@qa/server/topic/topic.service';
 import { User } from '@qa/server/user/decorators/user.decorator';
 import { AuthGuard } from '@qa/server/user/guards/user.guard';
 import { UserEntity } from '@qa/server/user/user.entity';
-import { TopicsRequest } from 'libs/api-interfaces';
+import { TopicsRequest, TopicWithAnswerResponse } from 'libs/api-interfaces';
 import { DeleteResult } from 'typeorm';
 
 @ApiTags('topic')
@@ -30,49 +31,48 @@ export class TopicController {
     return this.topicService.buildTopicResponse({ topic, currentUserId: currentUser.id });
   }
 
-  @Get(':slug')
-  @ApiCreatedResponse({ type: TopicResponseDto })
-  public async getTopicBySlug(@Param('slug') slug: string, @User('id') currentUserId?: number): Promise<TopicResponseDto> {
-    const topic = await this.topicService.findTopicBySlug(slug);
-    return await this.topicService.buildTopicResponse({ topic, currentUserId });
+  @Get(':topicId')
+  @ApiCreatedResponse({ type: TopicWithAnswerResponseDto })
+  public async getTopicBySlug(@Param('topicId') topicId: string, @User('id') currentUserId?: number): Promise<TopicWithAnswerResponseDto> {
+    return await this.topicService.getTopicByIdWithAnswers(+topicId, currentUserId);
   }
 
-  @Delete(':slug')
+  @Delete(':topicId')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  public async deleteTopicBySlug(@User('id') currentUserId: number, @Param('slug') slug: string): Promise<DeleteResult> {
-    return await this.topicService.deleteTopicBySlug(currentUserId, slug);
+  public async deleteTopicBySlug(@User('id') currentUserId: number, @Param('topicId') topicId: string): Promise<DeleteResult> {
+    return await this.topicService.deleteTopicById(currentUserId, +topicId);
   }
 
-  @Put(':slug')
+  @Put(':topicId')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: TopicResponseDto })
-  public async updateTopicBySlug(
+  public async updateTopicById(
     @User('id') currentUserId: number,
-    @Param('slug') slug: string,
+    @Param('topicId') topicId: string,
     @Body() updateTopicDto: UpdateTopicDto,
   ): Promise<TopicResponseDto> {
-    const topic = await this.topicService.updateTopicBySlug(currentUserId, slug, updateTopicDto);
+    const topic = await this.topicService.updateTopicById(currentUserId, +topicId, updateTopicDto);
     return this.topicService.buildTopicResponse({ topic, currentUserId });
   }
 
-  @Post(':slug/like')
+  @Post(':topicId/like')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: TopicResponseDto })
-  public async likeTopicBySlug(@User('id') currentUserId: number, @Param('slug') slug: string): Promise<TopicResponseDto> {
-    const likedTopic = await this.topicService.likeTopicBySlug(currentUserId, slug);
-    return this.topicService.buildTopicResponse({ topic: likedTopic, currentUserId });
+  public async likeTopicById(@User('id') currentUserId: number, @Param('topicId') topicId: string): Promise<TopicResponseDto> {
+    const topic = await this.topicService.likeTopicById(currentUserId, +topicId);
+    return this.topicService.buildTopicResponse({ topic, currentUserId });
   }
 
-  @Delete(':slug/like')
+  @Delete(':topicId/like')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: TopicResponseDto })
-  public async dislikeTopicBySlug(@User('id') currentUserId: number, @Param('slug') slug: string): Promise<TopicResponseDto> {
-    const dislikedTopic = await this.topicService.dislikeTopicBySlug(currentUserId, slug);
-    return this.topicService.buildTopicResponse({ topic: dislikedTopic, currentUserId });
+  public async dislikeTopicById(@User('id') currentUserId: number, @Param('topicId') topicId: string): Promise<TopicResponseDto> {
+    const topic = await this.topicService.dislikeTopicById(currentUserId, +topicId);
+    return this.topicService.buildTopicResponse({ topic, currentUserId });
   }
 
 }

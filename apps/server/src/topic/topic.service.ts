@@ -1,11 +1,12 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AnswerService } from '@qa/server/answer/answer.service';
 import { TagService } from '@qa/server/tag/tag.service';
-import { CreateTopicDto, TopicResponseDto, TopicsResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
+import { CreateTopicDto, TopicResponseDto, TopicsResponseDto, TopicWithAnswerResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
 import { TopicEntity } from '@qa/server/topic/topic.entity';
 import { UserEntity } from '@qa/server/user/user.entity';
 import { UserService } from '@qa/server/user/user.service';
-import { LikeStatus, TopicsRequest, TopicWithLikeStatusResponse } from 'libs/api-interfaces';
+import { LikeStatus, TopicsRequest } from 'libs/api-interfaces';
 import slugify from "slugify";
 import { DeleteResult, getRepository, In, Repository } from 'typeorm';
 
@@ -19,6 +20,8 @@ export class TopicService {
     private readonly userRepository: Repository<UserEntity>,
     private userService: UserService,
     private tagService: TagService,
+    @Inject(forwardRef(() => AnswerService))
+    private answerServices: AnswerService,
   ) { }
 
   public async findAll(query: TopicsRequest, currentUserId?: number): Promise<TopicsResponseDto> {
@@ -54,10 +57,7 @@ export class TopicService {
       order: { 'updatedAt': 'DESC' },
     });
 
-    const currentUserWithLikeStatus = await this.userService.getUserByIdWithLikeStatus(currentUserId);
-
-    console.log(currentUserWithLikeStatus);
-
+    const currentUserWithLikeStatus = await this.userService.getUserByIdWithTopicLikeStatus(currentUserId);
 
     return {
       count: selectedTopicsIds.length,
@@ -89,12 +89,12 @@ export class TopicService {
   ): Promise<TopicResponseDto> {
     let likeStatus = LikeStatus.NEUTRAL;
 
-    currentUserWithLikeStatus = currentUserWithLikeStatus || await this.userService.getUserByIdWithLikeStatus(currentUserId);
+    currentUserWithLikeStatus = currentUserWithLikeStatus || await this.userService.getUserByIdWithTopicLikeStatus(currentUserId);
 
     if (currentUserWithLikeStatus) {
-      const isTopicLiked = currentUserWithLikeStatus.likes
+      const isTopicLiked = currentUserWithLikeStatus.topicLikes
         .find(({ id: likedTopicId }) => likedTopicId === topic.id);
-      const isTopicDisliked = currentUserWithLikeStatus.dislikes
+      const isTopicDisliked = currentUserWithLikeStatus.topicDislikes
         .find(({ id: dislikedTopicId }) => dislikedTopicId === topic.id);
 
       if (isTopicLiked) {
@@ -117,40 +117,47 @@ export class TopicService {
     return `${slug}-${uniquePostfix}`;
   }
 
-  public async findTopicBySlug(slug: string): Promise<TopicEntity> {
-    const topicBySlug = await this.topicRepository.findOne({
-      where: { slug },
+  public async findTopicById(topicId: number): Promise<TopicEntity> {
+    const topicById = await this.topicRepository.findOne({
+      where: { id: topicId },
     });
 
-    if (!topicBySlug) {
+    if (!topicById) {
       throw new HttpException("There is no such topic", HttpStatus.NOT_FOUND);
     }
 
-    return topicBySlug;
+    return topicById;
   }
 
-  public async deleteTopicBySlug(currentUserId: number, slug: string): Promise<DeleteResult> {
-    const topicToDelete = await this.findTopicBySlug(slug);
+  public async getTopicByIdWithAnswers(topicId: number, currentUserId?: number): Promise<TopicWithAnswerResponseDto> {
+    const topicById = await this.findTopicById(topicId);
+
+    const answers = await this.answerServices.findAnswersForTopic(topicId, currentUserId)
+
+    const formattedTopic = await this.buildTopicResponse({ topic: topicById, currentUserId })
+
+    return {
+      ...formattedTopic,
+      answers,
+    };
+  }
+
+  public async deleteTopicById(currentUserId: number, topicId: number): Promise<DeleteResult> {
+    const topicToDelete = await this.findTopicById(topicId);
 
     if (topicToDelete.author.id !== currentUserId) {
-      throw new HttpException("You don't have rights to delete this article", HttpStatus.FORBIDDEN);
+      throw new HttpException("You don't have rights to delete this topic", HttpStatus.FORBIDDEN);
     }
 
     // TODO: fix delete
     return await this.topicRepository.delete(topicToDelete);
   }
 
-  public async updateTopicBySlug(currentUserId: number, slug: string, updateTopicDto: UpdateTopicDto): Promise<TopicEntity> {
-    const topicToUpdate = await this.topicRepository.findOne({
-      where: { slug },
-    });
-
-    if (!topicToUpdate) {
-      throw new HttpException("There is no such topic", HttpStatus.NOT_FOUND);
-    }
+  public async updateTopicById(currentUserId: number, topicId: number, updateTopicDto: UpdateTopicDto): Promise<TopicEntity> {
+    const topicToUpdate = await this.findTopicById(topicId);
 
     if (topicToUpdate.author.id !== currentUserId) {
-      throw new HttpException("You don't have rights to update this article", HttpStatus.FORBIDDEN);
+      throw new HttpException("You don't have rights to update this topic", HttpStatus.FORBIDDEN);
     }
 
     Object.assign(topicToUpdate, updateTopicDto);
@@ -159,21 +166,21 @@ export class TopicService {
     return await this.topicRepository.save(topicToUpdate);
   }
 
-  public async likeTopicBySlug(currentUserId: number, slug: string): Promise<TopicEntity> {
-    const topicForInteraction = await this.findTopicBySlug(slug);
-    const currentUser = await this.userService.getUserByIdWithLikeStatus(currentUserId);
+  public async likeTopicById(currentUserId: number, topicId: number): Promise<TopicEntity> {
+    const topicForInteraction = await this.findTopicById(topicId);
+    const currentUser = await this.userService.getUserByIdWithTopicLikeStatus(currentUserId);
 
-    const isAlreadyLikedTopicIndex = currentUser.likes.findIndex((likedTopic) => likedTopic.id === topicForInteraction.id)
+    const isAlreadyLikedTopicIndex = currentUser.topicLikes.findIndex((likedTopic) => likedTopic.id === topicForInteraction.id)
     if (isAlreadyLikedTopicIndex !== -1) {
-      currentUser.likes.splice(isAlreadyLikedTopicIndex, 1);
+      currentUser.topicLikes.splice(isAlreadyLikedTopicIndex, 1);
       topicForInteraction.likesCount--;
     } else {
-      currentUser.likes.push(topicForInteraction);
+      currentUser.topicLikes.push(topicForInteraction);
       topicForInteraction.likesCount++;
 
-      const isAlreadyDislikedTopicIndex = currentUser.dislikes.findIndex((dislikedTopic) => dislikedTopic.id === topicForInteraction.id)
+      const isAlreadyDislikedTopicIndex = currentUser.topicDislikes.findIndex((dislikedTopic) => dislikedTopic.id === topicForInteraction.id)
       if (isAlreadyDislikedTopicIndex !== -1) {
-        currentUser.dislikes.splice(isAlreadyDislikedTopicIndex, 1);
+        currentUser.topicDislikes.splice(isAlreadyDislikedTopicIndex, 1);
         topicForInteraction.likesCount++;
       }
     }
@@ -183,21 +190,21 @@ export class TopicService {
     return topicForInteraction;
   }
 
-  public async dislikeTopicBySlug(currentUserId: number, slug: string): Promise<TopicEntity> {
-    const topicForInteraction = await this.findTopicBySlug(slug);
-    const currentUser = await this.userService.getUserByIdWithLikeStatus(currentUserId);
+  public async dislikeTopicById(currentUserId: number, topicId: number): Promise<TopicEntity> {
+    const topicForInteraction = await this.findTopicById(topicId);
+    const currentUser = await this.userService.getUserByIdWithTopicLikeStatus(currentUserId);
 
-    const isAlreadyDislikedTopicIndex = currentUser.dislikes.findIndex((dislikedTopic) => dislikedTopic.id === topicForInteraction.id)
+    const isAlreadyDislikedTopicIndex = currentUser.topicDislikes.findIndex((dislikedTopic) => dislikedTopic.id === topicForInteraction.id)
     if (isAlreadyDislikedTopicIndex !== -1) {
-      currentUser.dislikes.splice(isAlreadyDislikedTopicIndex, 1);
+      currentUser.topicDislikes.splice(isAlreadyDislikedTopicIndex, 1);
       topicForInteraction.likesCount++;
     } else {
-      currentUser.dislikes.push(topicForInteraction);
+      currentUser.topicDislikes.push(topicForInteraction);
       topicForInteraction.likesCount--;
 
-      const isAlreadyLikedTopicIndex = currentUser.likes.findIndex((likedTopic) => likedTopic.id === topicForInteraction.id)
+      const isAlreadyLikedTopicIndex = currentUser.topicLikes.findIndex((likedTopic) => likedTopic.id === topicForInteraction.id)
       if (isAlreadyLikedTopicIndex !== -1) {
-        currentUser.likes.splice(isAlreadyLikedTopicIndex, 1);
+        currentUser.topicLikes.splice(isAlreadyLikedTopicIndex, 1);
         topicForInteraction.likesCount--;
       }
     }
