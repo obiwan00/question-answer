@@ -1,4 +1,7 @@
-<h1>Welcome to question-answer!</h1>
-<p>Tags: {{ (tags$ | async)?.join(', ') }}</p>
+<qa-header>
 
-<a href="/api/auth/google/login">login with Google</a>
+</qa-header>
+<main>
+  <router-outlet></router-outlet>
+</main>
+<qa-footer></qa-footer>
