@@ -20,12 +20,12 @@ export class AnswerController {
     return this.answerService.buildAnswerResponse({ answer, currentUserId: currentUser.id });
   }
 
-  @Put(':id')
+  @Put(':answerId')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: AnswerResponseDto })
   public async update(
-    @Param('id') answerId: string,
+    @Param('answerId') answerId: string,
     @User('id') currentUserId: number,
     @Body() updateAnswerDto: UpdateAnswerDto,
   ): Promise<AnswerResponseDto> {
@@ -51,6 +51,15 @@ export class AnswerController {
     return this.answerService.buildAnswerResponse({ answer, currentUserId });
   }
 
-
-  // TODO: implement ✅
+  @Post(':answerId')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ isArray: true, type: AnswerResponseDto })
+  public async acceptAnswer(
+    @Param('answerId') answerId: string,
+    @User('id') currentUserId: number,
+  ): Promise<AnswerResponseDto[]> {
+    const answers = await this.answerService.acceptAnswer(+answerId, currentUserId);
+    return Promise.all(answers.map(answer => this.answerService.buildAnswerResponse({ answer, currentUserId })));
+  }
 }

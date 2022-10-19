@@ -5,7 +5,7 @@ import { TopicService } from '@qa/server/topic/topic.service';
 import { UserEntity } from '@qa/server/user/user.entity';
 import { UserService } from '@qa/server/user/user.service';
 import { LikeStatus } from 'libs/api-interfaces';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { AnswerResponseDto, CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
 
 @Injectable()
@@ -34,9 +34,10 @@ export class AnswerService {
     return this.answerRepository.save(newAnswer);
   }
 
-  public async findAnswerById(id: number): Promise<AnswerEntity> {
+  public async findAnswerById(id: number, options?: FindOneOptions<AnswerEntity>): Promise<AnswerEntity> {
     const answerById = await this.answerRepository.findOne({
       where: { id },
+      ...options,
     });
 
     if (!answerById) {
@@ -50,7 +51,7 @@ export class AnswerService {
     const answerToUpdate = await this.findAnswerById(answerId)
 
     if (answerToUpdate.author.id !== currentUserId) {
-      throw new HttpException("You don't have rights to update this article", HttpStatus.FORBIDDEN);
+      throw new HttpException("You don't have rights to update this answer", HttpStatus.FORBIDDEN);
     }
 
     Object.assign(answerToUpdate, updateAnswerDto);
@@ -143,5 +144,32 @@ export class AnswerService {
 
     return await Promise.all(answersForTopic.map(answerForTopic =>
       this.buildAnswerResponse({ answer: answerForTopic, currentUserWithLikeStatus })))
+  }
+
+  public async acceptAnswer(answerId: number, currentUserId: number): Promise<AnswerEntity[]> {
+    const answerToAccept = await this.findAnswerById(answerId, {
+      relations: ['topic'],
+    });
+
+    if (answerToAccept.author.id !== currentUserId) {
+      throw new HttpException("You don't have rights to accept this answer", HttpStatus.FORBIDDEN);
+    }
+
+
+    const answersToSameTopic = await this.answerRepository.find({
+      where: { topic: answerToAccept.topic.id }
+    })
+
+    answersToSameTopic.map(answer => {
+      if (answer.id === answerId) {
+        answer.accepted = !answer.accepted;
+      } else {
+        answer.accepted = false
+      }
+
+      return answer;
+    });
+
+    return await this.answerRepository.save(answersToSameTopic);
   }
 }

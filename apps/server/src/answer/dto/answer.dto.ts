@@ -23,6 +23,9 @@ export class AnswerResponseDto implements AnswerResponse {
   id: number;
 
   @ApiProperty()
+  accepted: boolean;
+
+  @ApiProperty()
   likesCount: number;
 
   @ApiProperty()

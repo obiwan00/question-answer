@@ -12,6 +12,7 @@ export interface UpdateAnswer extends Pick<CreateAnswer, 'body'> {
 export interface AnswerResponse {
   id: number;
   likesCount: number;
+  accepted: boolean;
   body: string;
   author: UserResponse;
   createdAt: Date;

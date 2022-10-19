@@ -10,6 +10,9 @@ export class AnswerEntity {
   @Column()
   public body: string;
 
+  @Column({ default: false })
+  public accepted: boolean;
+
   @Column({ default: 0 })
   public likesCount: number;
 
