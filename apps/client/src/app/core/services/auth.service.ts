@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoginUser, UserAuthResponse } from '@qa/api-interfaces';
+import { CreateUser, LoginUser, UserAuthResponse } from '@qa/api-interfaces';
 import { LocalStorageService } from '@qa/client/app/core/services/storage.service';
 import { Observable } from 'rxjs';
 
@@ -16,6 +16,10 @@ export class AuthService {
 
   public login(payload: LoginUser): Observable<UserAuthResponse> {
     return this.httpClient.post<UserAuthResponse>('/api/users/login', payload);
+  }
+
+  public register(payload: CreateUser): Observable<UserAuthResponse> {
+    return this.httpClient.post<UserAuthResponse>('/api/users', payload);
   }
 
   public saveToken(token: string): void {

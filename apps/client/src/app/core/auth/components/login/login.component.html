@@ -43,8 +43,8 @@
           <span
             *ngIf="getFieldErrorsKeys('password')?.['minlength'] as minlengthError"
           >
-            The field should be at least
-            {{ minlengthError.requiredLength }} length
+            The field must be more than
+            {{ minlengthError.requiredLength }} characters
           </span>
         </mat-error>
       </mat-form-field>

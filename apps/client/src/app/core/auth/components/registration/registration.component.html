@@ -1,0 +1,96 @@
+<form
+  [formGroup]="registrationForm"
+  (ngSubmit)="submitRegistration()"
+  class="container"
+>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title><h1 class="mat-h1">Registration</h1></mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" placeholder="Username" />
+        <mat-error *ngIf="shouldShowErrorMessages('username')">
+          <span *ngIf="getFieldErrorsKeys('username')?.['required']">
+            The field is required
+          </span>
+          <span
+            *ngIf="getFieldErrorsKeys('username')?.['minlength'] as minlengthError"
+          >
+            The field must be more than
+            {{ minlengthError.requiredLength }} characters
+          </span>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="Email" />
+        <mat-error *ngIf="shouldShowErrorMessages('email')">
+          <span *ngIf="getFieldErrorsKeys('email')?.['required']">
+            The field is required
+          </span>
+          <span *ngIf="getFieldErrorsKeys('email')?.['email']">
+            The field should be email
+          </span>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          placeholder="Password"
+          [type]="shouldHidePassword ? 'password' : 'text'"
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="shouldHidePassword"
+          (click)="togglePasswordShowing()"
+        >
+          <mat-icon>{{
+            shouldHidePassword ? 'visibility_off' : 'visibility'
+          }}</mat-icon>
+        </button>
+        <mat-error *ngIf="shouldShowErrorMessages('password')">
+          <span *ngIf="getFieldErrorsKeys('password')?.['required']">
+            The field is required
+          </span>
+          <span
+            *ngIf="getFieldErrorsKeys('password')?.['minlength'] as minlengthError"
+          >
+            The field must be more than
+            {{ minlengthError.requiredLength }} characters
+          </span>
+        </mat-error>
+      </mat-form-field>
+      <mat-error *ngIf="serverErrorMessage">
+        {{ serverErrorMessage }}
+      </mat-error>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <a
+        [routerLink]="['/', 'auth', 'login']"
+        type="button"
+        mat-raised-button
+        [disabled]="isRegistrationDataSubmitting"
+      >
+        Login
+      </a>
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        [disabled]="shouldDisableSubmit"
+      >
+        {{ isRegistrationDataSubmitting ? 'Loading...' : 'Register' }}
+      </button>
+    </mat-card-actions>
+    <mat-card-footer *ngIf="isRegistrationDataSubmitting">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </mat-card-footer>
+  </mat-card>
+</form>
