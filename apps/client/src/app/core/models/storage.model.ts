@@ -1,3 +1,3 @@
-export enum LocalStorage {
-  TOKEN = 'TOKEN'
+export enum LocalStorageKey {
+  AUTHORIZED_USER = 'AUTHORIZED_USER'
 }

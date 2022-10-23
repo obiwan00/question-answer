@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
+import { LocalStorageKey as LocalStorageKey } from '@qa/client/app/core/models/storage.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocalStorageService {
 
-  public saveData(key: string, value: string): void {
+  public saveData(key: LocalStorageKey, value: string): void {
     localStorage.setItem(key, value);
   }
 
-  public saveStringifiedData(key: string, value: string): void {
+  public saveStringifiedData(key: string, value: unknown): void {
     localStorage.setItem(key, JSON.stringify(value));
   }
 
@@ -17,7 +18,7 @@ export class LocalStorageService {
     return localStorage.getItem(key);
   }
 
-  public getParsedData(key: string): string | null {
+  public getParsedData<T>(key: string): T | null {
     const storageValueByKey = this.getData(key);
 
     if (!storageValueByKey) {

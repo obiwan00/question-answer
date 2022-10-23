@@ -63,8 +63,7 @@ export class RegistrationComponent {
           this.registrationForm.enable();
         }),
       )
-      .subscribe((registrationResponse: UserAuthResponse) => {
-        this.authService.saveToken(registrationResponse.token)
+      .subscribe(() => {
         this.router.navigate(['/']);
       });
   }

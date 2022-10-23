@@ -64,8 +64,7 @@ export class LoginComponent {
           this.loginForm.enable();
         }),
       )
-      .subscribe((loginResponse: UserAuthResponse) => {
-        this.authService.saveToken(loginResponse.token)
+      .subscribe(() => {
         this.router.navigate(['/']);
       });
   }

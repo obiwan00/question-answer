@@ -1,7 +1,11 @@
 <header>
   <div class="container">
     <a [routerLink]="['/']">
-      <img class="logo" src="/assets/images/qa-logo.png" alt="Question and answer">
+      <img
+        class="logo"
+        src="/assets/images/qa-logo.png"
+        alt="Question and answer"
+      />
     </a>
     <nav class="navigation-main">
       <ul>
@@ -10,9 +14,23 @@
         <li><a [routerLink]="['about']" mat-button>About</a></li>
       </ul>
     </nav>
-    <div class="authorization">
-      <a [routerLink]="['auth/login']" mat-raised-button color="primary">Login</a>
-      <a [routerLink]="['auth','registration']" mat-raised-button color="primary">Sign On</a>
+    <div class="auth-buttons">
+      <ng-container *ngIf="isLoggedIn; else notLoggedInContent">
+        <button (click)="logout()" mat-raised-button color="primary">
+          Logout
+        </button>
+      </ng-container>
+      <ng-template #notLoggedInContent>
+        <a [routerLink]="['auth/login']" mat-raised-button color="primary"
+          >Login</a
+        >
+        <a
+          [routerLink]="['auth', 'registration']"
+          mat-raised-button
+          color="primary"
+          >Sign On</a
+        >
+      </ng-template>
     </div>
   </div>
 </header>

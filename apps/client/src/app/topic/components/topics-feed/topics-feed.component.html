@@ -1,1 +1,4 @@
-<p>topics-feed works!</p>
+<div *ngFor="let topic of (topics$ | async)?.topics">
+  {{ topic | json }}
+  <br />
+</div>

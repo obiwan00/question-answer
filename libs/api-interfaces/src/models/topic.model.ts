@@ -21,6 +21,13 @@ export interface TopicResponse {
   tags?: string[];
 }
 
+export interface TopicsResponse {
+  offset: number;
+  limit: number;
+  count: number;
+  topics: TopicResponse[];
+}
+
 export interface TopicWithAnswerResponse extends TopicResponse {
   answers: AnswerResponse[];
 }

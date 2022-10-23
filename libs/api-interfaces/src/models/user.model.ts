@@ -9,6 +9,8 @@ export interface UserAuthResponse extends UserResponse {
   token: string;
 }
 
+export type AuthorizedUser = UserAuthResponse
+
 export interface CreateUser {
   username: string;
   email: string;
