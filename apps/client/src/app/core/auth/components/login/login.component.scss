@@ -1,0 +1,16 @@
+.container {
+  max-width: 500px;
+}
+
+::ng-deep .mat-card-header-text {
+  width: 100%;
+  text-align: center;
+}
+
+mat-form-field {
+  margin-bottom: 10px;
+}
+
+.mat-form-field {
+  width: 100%;
+}

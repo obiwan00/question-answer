@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { TopicRoutingModule } from './topic-routing.module';
+import { NgModule } from '@angular/core';
+import { UserTopicsFeedComponent } from '@qa/client/app/topic/components/user-topics-feed/user-topics-feed.component';
 import { TopicsFeedComponent } from './components/topics-feed/topics-feed.component';
+import { TopicRoutingModule } from './topic-routing.module';
 
 const COMPONENTS = [
   TopicsFeedComponent,
+  UserTopicsFeedComponent,
 ];
 
 @NgModule({

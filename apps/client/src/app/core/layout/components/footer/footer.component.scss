@@ -1,0 +1,21 @@
+@use "@angular/material" as mat;
+@import "theme";
+
+footer {
+  padding: 20px 0;
+  background: mat.get-color-from-palette($light-primary, 100);
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+ul {
+  display: flex;
+}
+
+li {
+  margin-right: 20px;
+}

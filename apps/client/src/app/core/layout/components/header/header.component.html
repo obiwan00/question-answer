@@ -1,11 +1,18 @@
 <header>
-  <nav>
-    <ul>
-      <li><a [routerLink]="['topics']">Home</a></li>
-      <li><a [routerLink]="['topics', 'user']">Your topics</a></li>
-      <li><a [routerLink]="['about']">About</a></li>
-    </ul>
-  </nav>
-  <a [routerLink]="['auth/login']">Login</a>
-  <a [routerLink]="['auth','registration']">Sign On</a>
+  <div class="container">
+    <a [routerLink]="['/']">
+      <img class="logo" src="/assets/images/qa-logo.png" alt="Question and answer">
+    </a>
+    <nav class="navigation-main">
+      <ul>
+        <li><a [routerLink]="['topics']" mat-button>Home</a></li>
+        <li><a [routerLink]="['topics', 'user']" mat-button>Your topics</a></li>
+        <li><a [routerLink]="['about']" mat-button>About</a></li>
+      </ul>
+    </nav>
+    <div class="authorization">
+      <a [routerLink]="['auth/login']" mat-raised-button color="primary">Login</a>
+      <a [routerLink]="['auth','registration']" mat-raised-button color="primary">Sign On</a>
+    </div>
+  </div>
 </header>
