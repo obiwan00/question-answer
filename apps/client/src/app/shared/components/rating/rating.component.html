@@ -1,0 +1,19 @@
+<button
+  [class.liked]="likeStatus === LikeStatus.LIKED"
+  aria-label="like"
+  [disabled]="disabled"
+  (click)="emitLike()"
+>
+  👍
+</button>
+<div class="count" aria-label="rating">
+  {{ rating }}
+</div>
+<button
+  [class.disliked]="likeStatus === LikeStatus.DISLIKED"
+  aria-label="dislike"
+  [disabled]="disabled"
+  (click)="emitDislike()"
+>
+  👎
+</button>

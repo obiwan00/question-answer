@@ -17,9 +17,11 @@ export interface TopicResponse {
   author: UserResponse;
   createdAt: Date;
   updatedAt: Date;
-  likeStatus?: LikeStatus;
+  likeStatus: LikeStatus;
   tags?: string[];
 }
+
+export type Topic = TopicResponse;
 
 export interface TopicsResponse {
   offset: number;

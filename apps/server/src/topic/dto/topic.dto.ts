@@ -53,8 +53,7 @@ export class TopicResponseDto implements TopicResponse {
   updatedAt: Date;
 
   @ApiProperty({ enum: LikeStatus })
-  @ApiPropertyOptional()
-  likeStatus?: LikeStatus;
+  likeStatus: LikeStatus;
 }
 
 export class TopicWithAnswerResponseDto extends TopicResponseDto implements TopicWithAnswerResponse {

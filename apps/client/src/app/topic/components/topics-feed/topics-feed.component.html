@@ -1,4 +1,6 @@
-<div *ngFor="let topic of (topics$ | async)?.topics">
-  {{ topic | json }}
-  <br />
+<div class="container">
+  <qa-topic
+    *ngFor="let topic of (topics$ | async)?.topics"
+    [topic]="topic"
+  ></qa-topic>
 </div>

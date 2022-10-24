@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { AuthorizedUser, CreateUser, LoginUser, UserAuthResponse } from '@qa/api-interfaces';
 import { LocalStorageKey } from '@qa/client/app/core/models/storage.model';
 import { LocalStorageService } from '@qa/client/app/core/services/storage.service';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +18,8 @@ export class AuthService {
   public constructor(
     private httpClient: HttpClient,
     private localStorageService: LocalStorageService,
+    private snackBar: MatSnackBar,
+    private router: Router,
   ) {
     this.initUser();
   }
@@ -53,6 +57,13 @@ export class AuthService {
 
   public isLoggedIn(): boolean {
     return !!this.getUser();
+  }
+
+  public showLoginSnackBar$(): Observable<null> {
+    return of(null).pipe(tap(() => this.snackBar.open('You need to be logged in to do it', 'OK', {
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    })));
   }
 
   private setAuthorizedUser(authorizedUser: AuthorizedUser): void {

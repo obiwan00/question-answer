@@ -1,0 +1,41 @@
+.topic {
+  display: flex;
+
+  &__rating {
+    padding-right: 10px;
+    border-right: 2px solid black;
+    margin-right: 10px;
+  }
+
+  &__main {
+  }
+
+  &__title {
+  }
+
+  &__author {
+  }
+
+  &__body {
+    margin-bottom: 20px;
+  }
+
+  &__tags {
+  }
+
+  &__dates {
+  }
+}
+.tags {
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__item {
+    margin-right: 6px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background-color: lightgray;
+  }
+}
