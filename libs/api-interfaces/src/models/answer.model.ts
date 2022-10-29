@@ -17,5 +17,8 @@ export interface AnswerResponse {
   author: UserResponse;
   createdAt: Date;
   updatedAt: Date;
-  likeStatus?: LikeStatus;
+  likeStatus: LikeStatus;
 }
+
+export type Answer = AnswerResponse;
+

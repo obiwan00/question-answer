@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { TopicService } from '@qa/client/app/core/services/topic.service';
-import { TopicsResponse } from 'libs/api-interfaces';
+import { TopicsRequest, TopicsResponse } from 'libs/api-interfaces';
+import { finalize, Observable } from 'rxjs';
 
 @Component({
   templateUrl: './topics-feed.component.html',
@@ -9,22 +9,28 @@ import { TopicsResponse } from 'libs/api-interfaces';
 })
 export class TopicsFeedComponent {
 
+  public isLoading = false;
   public searchQuery: string;
-  public topics$ = this.topicService.getTopics();
+  public topics$ = this.getTopics();
 
   public constructor(
-    private http: HttpClient,
     private topicService: TopicService,
   ) { }
 
-  fetchTopicsBySearchQuery(searchQuery: string): void {
+  public fetchTopicsBySearchQuery(searchQuery: string): void {
     this.searchQuery = searchQuery;
-    this.topics$ = this.topicService.getTopics({ search: searchQuery });
+    this.topics$ = this.getTopics({ search: searchQuery });
   }
 
-  fetchTopics() {
+  public resetTopicsSearchAndFetchTopics(): void {
     this.searchQuery = '';
-    this.topics$ = this.topicService.getTopics();
+    this.topics$ = this.getTopics();
+  }
+
+  private getTopics(queryParams?: TopicsRequest): Observable<TopicsResponse> {
+    this.isLoading = true;
+    return this.topicService.getTopics(queryParams)
+      .pipe(finalize(() => { this.isLoading = false }));
   }
 
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
-import { TopicResponse, TopicsRequest, TopicsResponse } from 'libs/api-interfaces';
+import { TopicResponse, TopicsRequest, TopicsResponse, TopicWithAnswerResponse } from 'libs/api-interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -38,6 +38,10 @@ export class TopicService {
         ...params
       }
     });
+  }
+
+  public getTopicWithAnswersBySlug(slug: string): Observable<TopicWithAnswerResponse> {
+    return this.httpClient.get<TopicWithAnswerResponse>(`/api/topics/${slug}`);
   }
 
 }

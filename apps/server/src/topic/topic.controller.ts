@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CreateTopicDto, TopicResponseDto, TopicsRequestDto, TopicsResponseDto, TopicWithAnswerResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
+import { CreateTopicDto, TopicResponseDto, TopicsRequestDto, TopicsResponseDto, TopicWithAnswerResponseDto as TopicWithAnswersResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
 import { TopicService } from '@qa/server/topic/topic.service';
 import { User } from '@qa/server/user/decorators/user.decorator';
 import { AuthGuard } from '@qa/server/user/guards/user.guard';
@@ -34,10 +34,10 @@ export class TopicController {
     return this.topicService.buildTopicResponse({ topic, currentUserId: currentUser.id });
   }
 
-  @Get(':topicId')
-  @ApiCreatedResponse({ type: TopicWithAnswerResponseDto })
-  public async getTopicBySlug(@Param('topicId') topicId: string, @User('id') currentUserId?: number): Promise<TopicWithAnswerResponseDto> {
-    return await this.topicService.getTopicByIdWithAnswers(+topicId, currentUserId);
+  @Get(':slug')
+  @ApiCreatedResponse({ type: TopicWithAnswersResponseDto })
+  public async getTopicBySlug(@Param('slug') slug: string, @User('id') currentUserId?: number): Promise<TopicWithAnswersResponseDto> {
+    return await this.topicService.getTopicBySlugWithAnswers(slug, currentUserId);
   }
 
   @Delete(':topicId')

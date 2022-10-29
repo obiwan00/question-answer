@@ -7,7 +7,7 @@ import { AnswerService } from './answer.service';
 import { AnswerResponseDto, CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
 
 @ApiTags('answer')
-@Controller('answer')
+@Controller('answers')
 export class AnswerController {
   public constructor(private readonly answerService: AnswerService) { }
 

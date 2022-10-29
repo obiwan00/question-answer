@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AppRoutingModule } from '@qa/client/app/app-routing.module';
 
 
 const COMPONENTS = [
@@ -35,6 +36,7 @@ const MAT_MODULES = [
   imports: [
     CommonModule,
     SharedModule,
+    AppRoutingModule,
     ...MAT_MODULES,
   ],
 })

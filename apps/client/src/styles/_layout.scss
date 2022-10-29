@@ -5,7 +5,8 @@
   margin: 0 auto;
   padding-right: 20px;
   padding-left: 20px;
-}
-body {
-  background: mat.get-color-from-palette($light-primary, 50);
+
+  &--narrow {
+    max-width: 900px;
+  }
 }

@@ -1,0 +1,43 @@
+<mat-card class="answer">
+  <div class="answer__rating">
+    <qa-rating
+      [disabled]="isDisabled"
+      [rating]="answer.likesCount"
+      [likeStatus]="answer.likeStatus"
+      (like)="likeAnswer()"
+      (dislike)="dislikeAnswer()">
+    </qa-rating>
+    <div
+      *ngIf="answer.accepted"
+      class="answer__accept-icon"
+      title="Answer is accepted by topic author"
+      aria-label="Answer is accepted by topic author">
+      ✅
+    </div>
+  </div>
+  <main class="answer__main">
+    <h3 class="answer__author">Author: {{ answer.author.username }}</h3>
+    <p class="answer__body mat-h3">{{ answer.body }}</p>
+    <ul class="answer__dates">
+      <li>
+            <time [dateTime]="answer.createdAt">
+          Created at: {{ answer.createdAt | date }}
+        </time>
+          </li>
+      <li>
+            <time [dateTime]="answer.updatedAt">
+          Updated at: {{ answer.updatedAt | date }}
+        </time>
+          </li>
+    </ul>
+    <button
+      *ngIf="showAcceptButton"
+      mat-raised-button
+      color="accent"
+      class="answer__accept-btn"
+      (click)="handleAcceptAnswerClick()"
+      [disabled]="isDisabled">
+      {{answer.accepted ? 'Unaccepted answer ☑️' : 'Accept answer ✅'}}
+    </button>
+  </main>
+</mat-card>

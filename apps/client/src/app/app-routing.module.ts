@@ -5,10 +5,10 @@ import { authRoutes } from '@qa/client/app/core/auth/auth-routing.module';
 import { topicRoutes } from '@qa/client/app/topic/topic-routing.module';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'topics', pathMatch: 'prefix' },
-  { path: 'topics', children: topicRoutes },
+  { path: '', redirectTo: 'topics', pathMatch: 'full' },
   { path: 'auth', children: authRoutes },
   { path: 'about', component: AboutComponent },
+  { path: 'topics', children: topicRoutes },
   { path: '**', redirectTo: 'topics' },
 ];
 

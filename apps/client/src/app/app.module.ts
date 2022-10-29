@@ -16,6 +16,7 @@ const CORE_NG_MODULES = [
   BrowserModule,
   HttpClientModule,
   BrowserAnimationsModule,
+  AppRoutingModule,
 ];
 
 
@@ -24,8 +25,8 @@ const APP_MODULES = [
 
   AuthModule,
   LayoutModule,
-  TopicModule,
   AboutModule,
+  TopicModule,
 ];
 
 @NgModule({

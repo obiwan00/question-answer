@@ -87,28 +87,36 @@ export class TopicService {
       currentUserWithLikeStatus: null,
     }
   ): Promise<TopicResponseDto> {
-    let likeStatus = LikeStatus.NEUTRAL;
-
     currentUserWithLikeStatus = currentUserWithLikeStatus || await this.userService.getUserByIdWithTopicLikeStatus(currentUserId);
+    const likeStatus = this.getTopicLikeStatus(topic.id, currentUserWithLikeStatus);
 
-    if (currentUserWithLikeStatus) {
-      const isTopicLiked = currentUserWithLikeStatus.topicLikes
-        .find(({ id: likedTopicId }) => likedTopicId === topic.id);
-      const isTopicDisliked = currentUserWithLikeStatus.topicDislikes
-        .find(({ id: dislikedTopicId }) => dislikedTopicId === topic.id);
-
-      if (isTopicLiked) {
-        likeStatus = LikeStatus.LIKED;
-      } else if (isTopicDisliked) {
-        likeStatus = LikeStatus.DISLIKED;
-      }
-    }
+    const answersForTopic = await this.answerServices.findAnswersForTopic(topic.id);
+    const hasAcceptedAnswer = !!answersForTopic.find(answer => answer.accepted);
 
     return {
       ...topic,
       tags: topic?.tags?.map(({ name }) => name),
       likeStatus,
+      hasAcceptedAnswer,
+      answersCount: answersForTopic.length,
     };
+  }
+
+  private getTopicLikeStatus(topicId: number, currentUserWithLikeStatus: UserEntity): LikeStatus {
+    let likeStatus = LikeStatus.NEUTRAL;
+
+    const isTopicLiked = currentUserWithLikeStatus?.topicLikes
+      .find(({ id: likedTopicId }) => likedTopicId === topicId);
+    const isTopicDisliked = currentUserWithLikeStatus?.topicDislikes
+      .find(({ id: dislikedTopicId }) => dislikedTopicId === topicId);
+
+    if (isTopicLiked) {
+      likeStatus = LikeStatus.LIKED;
+    } else if (isTopicDisliked) {
+      likeStatus = LikeStatus.DISLIKED;
+    }
+
+    return likeStatus;
   }
 
   private getSlug(string: string): string {
@@ -129,10 +137,23 @@ export class TopicService {
     return topicById;
   }
 
-  public async getTopicByIdWithAnswers(topicId: number, currentUserId?: number): Promise<TopicWithAnswerResponseDto> {
-    const topicById = await this.findTopicById(topicId);
 
-    const answers = await this.answerServices.findAnswersForTopic(topicId, currentUserId)
+  public async findTopicBySlug(slug: string): Promise<TopicEntity> {
+    const topicBySlug = await this.topicRepository.findOne({
+      where: { slug },
+    });
+
+    if (!topicBySlug) {
+      throw new HttpException("There is no such topic", HttpStatus.NOT_FOUND);
+    }
+
+    return topicBySlug;
+  }
+
+  public async getTopicBySlugWithAnswers(slug: string, currentUserId?: number): Promise<TopicWithAnswerResponseDto> {
+    const topicById = await this.findTopicBySlug(slug);
+
+    const answers = await this.answerServices.findAnswersForTopic(topicById.id, currentUserId)
 
     const formattedTopic = await this.buildTopicResponse({ topic: topicById, currentUserId })
 

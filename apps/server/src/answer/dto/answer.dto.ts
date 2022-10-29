@@ -41,6 +41,5 @@ export class AnswerResponseDto implements AnswerResponse {
   updatedAt: Date;
 
   @ApiProperty({ enum: LikeStatus })
-  @ApiPropertyOptional()
-  likeStatus?: LikeStatus;
+  likeStatus: LikeStatus;
 }

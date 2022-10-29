@@ -10,24 +10,21 @@ import { finalize, ReplaySubject, takeUntil } from 'rxjs';
 })
 export class TopicComponent {
 
-
   @Input() topic: Topic;
 
+  public isUpdating = false;
   private destroy$ = new ReplaySubject<void>();
 
-  public ngOnDestroy() {
+  public constructor(
+    private topicService: TopicService,
+  ) { }
+
+  public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.unsubscribe();
   }
 
-  public isUpdating = false;
-
-  public constructor(
-    private topicService: TopicService,
-  ) {
-  }
-
-  public likeTopic() {
+  public likeTopic(): void {
     this.isUpdating = true;
     this.topicService.likeTopic(this.topic.id)
       .pipe(
@@ -39,8 +36,7 @@ export class TopicComponent {
       }))
   }
 
-  // TODO: add unsubscribe
-  public dislikeTopic() {
+  public dislikeTopic(): void {
     this.isUpdating = true;
     this.topicService.dislikeTopic(this.topic.id)
       .pipe(

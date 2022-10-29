@@ -18,7 +18,9 @@ export interface TopicResponse {
   createdAt: Date;
   updatedAt: Date;
   likeStatus: LikeStatus;
-  tags?: string[];
+  tags: string[];
+  hasAcceptedAnswer: boolean,
+  answersCount: number;
 }
 
 export type Topic = TopicResponse;

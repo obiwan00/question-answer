@@ -1,6 +1,7 @@
-<div class="container">
+<qa-spinner [active]="isLoading"></qa-spinner>
+<div class="container container--narrow">
   <qa-search-bar
-    (reset)="fetchTopics()"
+    (reset)="resetTopicsSearchAndFetchTopics()"
     (search)="fetchTopicsBySearchQuery($event)"></qa-search-bar>
   <div
     class="sub-search-bar-text"

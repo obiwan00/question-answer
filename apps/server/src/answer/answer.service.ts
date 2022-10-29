@@ -64,27 +64,30 @@ export class AnswerService {
     currentUserId?: number,
     currentUserWithLikeStatus?: UserEntity,
   }): Promise<AnswerResponseDto> {
-    let likeStatus = LikeStatus.NEUTRAL;
-
     currentUserWithLikeStatus = currentUserWithLikeStatus || await this.userService.getUserByIdWithAnswerLikeStatus(currentUserId);
-
-    if (currentUserWithLikeStatus) {
-      const isAnswerLiked = currentUserWithLikeStatus.answerLikes
-        .find(({ id: likedAnswerId }) => likedAnswerId === answer.id);
-      const isAnswerDisliked = currentUserWithLikeStatus.answerDislikes
-        .find(({ id: dislikedAnswerId }) => dislikedAnswerId === answer.id);
-
-      if (isAnswerLiked) {
-        likeStatus = LikeStatus.LIKED;
-      } else if (isAnswerDisliked) {
-        likeStatus = LikeStatus.DISLIKED;
-      }
-    }
+    const likeStatus = this.getAnswerLikeStatus(answer.id, currentUserWithLikeStatus);
 
     return {
       ...answer,
       likeStatus,
     };
+  }
+
+  private getAnswerLikeStatus(answerId: number, currentUserWithLikeStatus: UserEntity): LikeStatus {
+    let likeStatus = LikeStatus.NEUTRAL;
+
+    const isAnswerLiked = currentUserWithLikeStatus?.answerLikes
+      .find(({ id: likedAnswerId }) => likedAnswerId === answerId);
+    const isAnswerDisliked = currentUserWithLikeStatus?.answerDislikes
+      .find(({ id: dislikedAnswerId }) => dislikedAnswerId === answerId);
+
+    if (isAnswerLiked) {
+      likeStatus = LikeStatus.LIKED;
+    } else if (isAnswerDisliked) {
+      likeStatus = LikeStatus.DISLIKED;
+    }
+
+    return likeStatus;
   }
 
   public async likeAnswerById(currentUserId: number, answerId: number): Promise<AnswerEntity> {
@@ -137,13 +140,14 @@ export class AnswerService {
 
   public async findAnswersForTopic(topicId: number, currentUserId?: number): Promise<AnswerResponseDto[]> {
     const answersForTopic = await this.answerRepository.find({
-      where: { topic: topicId }
+      where: { topic: topicId },
+      order: { updatedAt: 'DESC' },
     })
 
     const currentUserWithLikeStatus = await this.userService.getUserByIdWithAnswerLikeStatus(currentUserId);
 
     return await Promise.all(answersForTopic.map(answerForTopic =>
-      this.buildAnswerResponse({ answer: answerForTopic, currentUserWithLikeStatus })))
+      this.buildAnswerResponse({ answer: answerForTopic, currentUserWithLikeStatus })));
   }
 
   public async acceptAnswer(answerId: number, currentUserId: number): Promise<AnswerEntity[]> {
@@ -157,7 +161,8 @@ export class AnswerService {
 
 
     const answersToSameTopic = await this.answerRepository.find({
-      where: { topic: answerToAccept.topic.id }
+      where: { topic: answerToAccept.topic.id },
+      order: { updatedAt: 'DESC' },
     })
 
     answersToSameTopic.map(answer => {

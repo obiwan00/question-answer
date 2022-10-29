@@ -1,0 +1,26 @@
+<qa-spinner [active]="isLoadingTopicWithAnswers"></qa-spinner>
+<div class="container container--narrow">
+  <ng-container *ngIf="topicWithAnswers">
+    <qa-topic [topic]="topicWithAnswers"></qa-topic>
+    <section class="answers">
+      <h3
+        class="answers__title"
+        *ngIf="topicWithAnswers.answers.length !== 0; else noAnswers">
+        Answers:
+      </h3>
+      <ng-template #noAnswers>
+        <h3>
+          There is no answers yet =(
+        </h3>
+      </ng-template>
+      <qa-answer
+        class="answers__item"
+        *ngFor="let answer of topicWithAnswers.answers"
+        [answer]="answer"
+        [showAcceptButton]="isCurrentUserTopicAuthor"
+        [disabled]="isAnswersLoading"
+        (acceptAnswer)="acceptAnswerById($event)"
+        (loading)="handleAnswerLoading($event)"></qa-answer>
+    </section>
+  </ng-container>
+</div>
