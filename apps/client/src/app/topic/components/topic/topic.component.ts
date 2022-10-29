@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { TopicService } from '@qa/client/app/core/services/topic.service';
 import { Topic } from 'libs/api-interfaces';
-import { filter, finalize } from 'rxjs';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'qa-topic',
@@ -27,9 +27,7 @@ export class TopicComponent {
     this.topicService.likeTopic(this.topic.id)
       .pipe(finalize(() => this.isUpdating = false))
       .subscribe((topic => {
-        if (!!topic) {
-          this.topic = topic;
-        }
+        this.topic = topic;
       }))
   }
 
@@ -39,9 +37,7 @@ export class TopicComponent {
     this.topicService.dislikeTopic(this.topic.id)
       .pipe(finalize(() => this.isUpdating = false))
       .subscribe((topic => {
-        if (!!topic) {
-          this.topic = topic;
-        }
+        this.topic = topic;
       }))
   }
 }

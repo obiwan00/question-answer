@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AuthorizedUser, CreateUser, LoginUser, UserAuthResponse } from '@qa/api-interfaces';
 import { LocalStorageKey } from '@qa/client/app/core/models/storage.model';
 import { LocalStorageService } from '@qa/client/app/core/services/storage.service';
-import { BehaviorSubject, EMPTY, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -55,15 +55,19 @@ export class AuthService {
     return this.user$$.value;
   }
 
-  public isLoggedIn(): boolean {
+  public get isLoggedIn(): boolean {
     return !!this.getUser();
   }
 
-  public showLoginSnackBar$(): Observable<null> {
-    return of(null).pipe(tap(() => this.snackBar.open('You need to be logged in to do it', 'OK', {
+  public showUnauthorizedSnackBar(): void {
+    this.snackBar.open('You need to be logged in to do it', 'OK', {
       horizontalPosition: 'right',
       verticalPosition: 'top',
-    })));
+    });
+  }
+
+  public getUnauthorizedError$(): Observable<never> {
+    return throwError('Unauthorized user');
   }
 
   private setAuthorizedUser(authorizedUser: AuthorizedUser): void {
