@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { TopicService } from '@qa/client/app/core/services/topic.service';
 import { Topic } from 'libs/api-interfaces';
-import { finalize } from 'rxjs';
+import { finalize, ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'qa-topic',
@@ -13,19 +13,27 @@ export class TopicComponent {
 
   @Input() topic: Topic;
 
+  private destroy$ = new ReplaySubject<void>();
+
+  public ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.unsubscribe();
+  }
+
   public isUpdating = false;
 
   public constructor(
     private topicService: TopicService,
   ) {
-
   }
 
-  // TODO: add unsubscribe
   public likeTopic() {
     this.isUpdating = true;
     this.topicService.likeTopic(this.topic.id)
-      .pipe(finalize(() => this.isUpdating = false))
+      .pipe(
+        finalize(() => this.isUpdating = false),
+        takeUntil(this.destroy$),
+      )
       .subscribe((topic => {
         this.topic = topic;
       }))
@@ -35,7 +43,10 @@ export class TopicComponent {
   public dislikeTopic() {
     this.isUpdating = true;
     this.topicService.dislikeTopic(this.topic.id)
-      .pipe(finalize(() => this.isUpdating = false))
+      .pipe(
+        finalize(() => this.isUpdating = false),
+        takeUntil(this.destroy$),
+      )
       .subscribe((topic => {
         this.topic = topic;
       }))

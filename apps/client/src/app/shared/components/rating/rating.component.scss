@@ -1,17 +1,28 @@
+@use "@angular/material" as mat;
+@import "theme";
+
 :host {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+.rating {
+  line-height: 2;
+}
+
 button {
   cursor: pointer;
+  background: transparent;
+  border: 1px solid black;
+  border-radius: 2px;
+  line-height: 1.5;
 
   &.liked {
-    background-color: green;
+    background-color: mat.get-color-from-palette($light-accent, 400);
   }
 
   &.disliked {
-    background-color: red;
+    background-color: mat.get-color-from-palette($light-warn, 400);
   }
 }
