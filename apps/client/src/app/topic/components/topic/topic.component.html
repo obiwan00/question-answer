@@ -1,13 +1,11 @@
 <mat-card class="topic">
-  <!-- TODO: move rating to own component -->
   <qa-rating
     class="topic__rating"
     [disabled]="isUpdating"
     [rating]="topic.likesCount"
     [likeStatus]="topic.likeStatus"
     (like)="likeTopic()"
-    (dislike)="dislikeTopic()"
-  ></qa-rating>
+    (dislike)="dislikeTopic()"></qa-rating>
   <main class="topic__main">
     <mat-card-title>
       <h2 class="topic__title">
@@ -22,14 +20,16 @@
       <div class="topic__tags tags">
         Tags:
         <ul class="tags__list">
-          <li *ngFor="let tag of topic.tags" class="tags__item">{{ tag }}</li>
+          <li
+            *ngFor="let tag of topic.tags"
+            class="tags__item">{{ tag }}</li>
         </ul>
       </div>
       <ul class="topic__dates">
         <li>
-          <time [dateTime]="topic.createdAt"
-            >Created at: {{ topic.createdAt | date }}</time
-          >
+          <time [dateTime]="topic.createdAt">
+            Created at: {{ topic.createdAt | date }}
+          </time>
         </li>
         <li>
           <time [dateTime]="topic.updatedAt">

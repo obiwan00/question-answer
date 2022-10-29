@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 const COMPONENTS = [
@@ -24,6 +25,7 @@ const MAT_MODULES = [
   MatCardModule,
   MatIconModule,
   MatProgressBarModule,
+  MatSnackBarModule,
 ];
 
 @NgModule({

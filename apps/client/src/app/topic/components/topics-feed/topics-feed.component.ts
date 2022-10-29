@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { TopicService } from '@qa/client/app/core/services/topic.service';
 import { TopicsResponse } from 'libs/api-interfaces';
 
 @Component({
@@ -8,12 +9,22 @@ import { TopicsResponse } from 'libs/api-interfaces';
 })
 export class TopicsFeedComponent {
 
-  public topics$ = this.http.get<TopicsResponse>('api/topics');
+  public searchQuery: string;
+  public topics$ = this.topicService.getTopics();
 
   public constructor(
     private http: HttpClient,
+    private topicService: TopicService,
   ) { }
 
+  fetchTopicsBySearchQuery(searchQuery: string): void {
+    this.searchQuery = searchQuery;
+    this.topics$ = this.topicService.getTopics({ search: searchQuery });
+  }
 
+  fetchTopics() {
+    this.searchQuery = '';
+    this.topics$ = this.topicService.getTopics();
+  }
 
 }

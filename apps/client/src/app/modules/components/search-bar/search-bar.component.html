@@ -1,0 +1,22 @@
+<form
+  [formGroup]="searchForm"
+  (ngSubmit)="submit()">
+  <div class="search-field">
+    <mat-icon>search</mat-icon>
+    <input
+      type="text"
+      formControlName="search"
+      placeholder="Search...">
+    <button
+      class="reset-button"
+      (click)="reset()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <button
+    class="search-button"
+    mat-raised-button
+    color="primary">
+    Search
+  </button>
+</form>

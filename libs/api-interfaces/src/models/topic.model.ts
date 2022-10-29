@@ -2,10 +2,10 @@ import { AnswerResponse } from "libs/api-interfaces/src/models/answer.model";
 import { UserResponse } from "libs/api-interfaces/src/models/user.model";
 
 export interface TopicsRequest {
-  offset: number;
-  limit: number;
-  tags: string[];
-  search: string;
+  offset?: number;
+  limit?: number;
+  tags?: string[];
+  search?: string;
 }
 
 export interface TopicResponse {

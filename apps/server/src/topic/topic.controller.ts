@@ -1,12 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { CreateTopicDto, TopicResponseDto, TopicsResponseDto, TopicWithAnswerResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
-import { TopicEntity } from '@qa/server/topic/topic.entity';
+import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { CreateTopicDto, TopicResponseDto, TopicsRequestDto, TopicsResponseDto, TopicWithAnswerResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
 import { TopicService } from '@qa/server/topic/topic.service';
 import { User } from '@qa/server/user/decorators/user.decorator';
 import { AuthGuard } from '@qa/server/user/guards/user.guard';
 import { UserEntity } from '@qa/server/user/user.entity';
-import { TopicsRequest, TopicWithAnswerResponse } from 'libs/api-interfaces';
+import { TopicsRequest } from 'libs/api-interfaces';
 import { DeleteResult } from 'typeorm';
 
 @ApiTags('topic')
@@ -17,6 +16,10 @@ export class TopicController {
   }
 
   @Get()
+  @ApiQuery({
+    required: false,
+    type: TopicsRequestDto,
+  })
   @ApiCreatedResponse({ type: TopicsResponseDto })
   public async findAll(@Query() query: TopicsRequest, @User('id') currentUserId?: number): Promise<TopicsResponseDto> {
     return await this.topicService.findAll(query, currentUserId);

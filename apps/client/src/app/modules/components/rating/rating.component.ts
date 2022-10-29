@@ -7,12 +7,12 @@ import { LikeStatus } from 'libs/api-interfaces';
   styleUrls: ['./rating.component.scss'],
 })
 export class RatingComponent {
-  @Input() rating: number;
-  @Input() likeStatus: LikeStatus;
-  @Input() disabled: boolean;
+  @Input() public rating: number;
+  @Input() public likeStatus: LikeStatus;
+  @Input() public disabled: boolean;
 
-  @Output() like = new EventEmitter<void>();
-  @Output() dislike = new EventEmitter<void>();
+  @Output() public like = new EventEmitter<void>();
+  @Output() public dislike = new EventEmitter<void>();
 
   public LikeStatus = LikeStatus;
 

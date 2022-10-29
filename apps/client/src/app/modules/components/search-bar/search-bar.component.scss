@@ -1,0 +1,43 @@
+@use "@angular/material" as mat;
+@import "theme";
+
+form {
+  display: flex;
+}
+
+.search-field {
+  width: 100%;
+  font-size: 16px;
+  padding: 5px 8px;
+
+  display: flex;
+  align-items: center;
+
+  border: 2px solid black;
+  background: white;
+  border-radius: 2px;
+
+  mat-icon {
+  }
+
+  input {
+    width: 100%;
+    padding: 0 10px;
+    border: none;
+    background-color: transparent;
+    outline: none;
+  }
+
+  .reset-button {
+    cursor: pointer;
+    border: 0;
+    background: none;
+    padding: 0;
+    line-height: 0;
+  }
+}
+
+.search-button {
+  flex-shrink: 0;
+  margin-left: 20px;
+}

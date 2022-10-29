@@ -6,15 +6,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { RatingModule } from '@qa/client/app/modules/components/rating/rating.module';
+import { SearchBarModule } from '@qa/client/app/modules/components/search-bar/search-bar.module';
 import { SharedModule } from '@qa/client/app/shared/shared.module';
-import { UserTopicsFeedComponent } from '@qa/client/app/topic/components/user-topics-feed/user-topics-feed.component';
 import { TopicComponent } from './components/topic/topic.component';
 import { TopicsFeedComponent } from './components/topics-feed/topics-feed.component';
 import { TopicRoutingModule } from './topic-routing.module';
 
 const COMPONENTS = [
   TopicsFeedComponent,
-  UserTopicsFeedComponent,
   TopicComponent,
 ];
 
@@ -27,6 +27,11 @@ const MAT_MODULES = [
   // MatProgressBarModule,
 ];
 
+const APP_MODULES = [
+  RatingModule,
+  SearchBarModule,
+];
+
 @NgModule({
   declarations: [...COMPONENTS],
   imports: [
@@ -34,6 +39,7 @@ const MAT_MODULES = [
     TopicRoutingModule,
     SharedModule,
     ...MAT_MODULES,
+    ...APP_MODULES,
   ],
   exports: [...COMPONENTS],
 })

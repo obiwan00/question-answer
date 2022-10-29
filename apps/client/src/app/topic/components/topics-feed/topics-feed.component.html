@@ -1,6 +1,13 @@
 <div class="container">
+  <qa-search-bar
+    (reset)="fetchTopics()"
+    (search)="fetchTopicsBySearchQuery($event)"></qa-search-bar>
+  <div
+    class="sub-search-bar-text"
+    *ngIf="searchQuery">
+    Search results by query "{{searchQuery}}":
+  </div>
   <qa-topic
     *ngFor="let topic of (topics$ | async)?.topics"
-    [topic]="topic"
-  ></qa-topic>
+    [topic]="topic"></qa-topic>
 </div>
