@@ -37,7 +37,10 @@ export class TopicService {
 
 
     if (query.search) {
-      queryBuilder.andWhere('topics.title LIKE :search OR topics.body LIKE :search', { search: `%${query.search}%` });
+      queryBuilder.andWhere(
+        'LOWER(topics.title) LIKE LOWER(:search) OR LOWER(topics.body) LIKE LOWER(:search)',
+        { search: `%${query.search}%` }
+      );
     }
 
     if (query.tags) {

@@ -1,6 +1,6 @@
 <form
   [formGroup]="searchForm"
-  (ngSubmit)="submit()">
+  (submit)="submit()">
   <div class="search-field">
     <mat-icon>search</mat-icon>
     <input
@@ -8,15 +8,18 @@
       formControlName="search"
       placeholder="Search...">
     <button
+      *ngIf="searchForm.get('search')?.value"
+      type="button"
       class="reset-button"
       (click)="reset()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
   <button
+    [disabled]="disabled"
     class="search-button"
     mat-raised-button
-    color="primary">
+    color="accent">
     Search
   </button>
 </form>

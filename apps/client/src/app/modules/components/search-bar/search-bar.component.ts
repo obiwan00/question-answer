@@ -21,6 +21,19 @@ export class SearchBarComponent {
     return this._searchBarText;
   }
 
+  private _disabled: boolean;
+  @Input() public set disabled(isDisabled: boolean) {
+    this._disabled = isDisabled;
+    if (isDisabled) {
+      this.searchForm.disable();
+    } else {
+      this.searchForm.enable();
+    }
+  }
+
+  public get disabled(): boolean {
+    return this._disabled;
+  }
   @Output() public search = new EventEmitter<string>();
   @Output() public resetSearch = new EventEmitter<void>();
 

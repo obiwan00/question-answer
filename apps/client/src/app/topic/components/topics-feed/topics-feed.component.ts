@@ -10,26 +10,36 @@ import { finalize, Observable } from 'rxjs';
 export class TopicsFeedComponent {
 
   public isLoading = false;
-  public searchQuery: string;
-  public topics$ = this.getTopics();
+  public topics$ = this.getTopicsByQueryParams();
+  public topicRequestQueryParams: TopicsRequest = {}
 
   public constructor(
     private topicService: TopicService,
   ) { }
 
   public fetchTopicsBySearchQuery(searchQuery: string): void {
-    this.searchQuery = searchQuery;
-    this.topics$ = this.getTopics({ search: searchQuery });
+    if (!searchQuery) {
+      return;
+    }
+
+    this.topicRequestQueryParams.search = searchQuery;
+    this.topics$ = this.getTopicsByQueryParams();
   }
 
   public resetTopicsSearchAndFetchTopics(): void {
-    this.searchQuery = '';
-    this.topics$ = this.getTopics();
+    if (!this.topicRequestQueryParams.search) {
+      return;
+    }
+    console.log(this.topicRequestQueryParams);
+    delete this.topicRequestQueryParams.search;
+    console.log(this.topicRequestQueryParams);
+
+    this.topics$ = this.getTopicsByQueryParams();
   }
 
-  private getTopics(queryParams?: TopicsRequest): Observable<TopicsResponse> {
+  private getTopicsByQueryParams(): Observable<TopicsResponse> {
     this.isLoading = true;
-    return this.topicService.getTopics(queryParams)
+    return this.topicService.getTopics(this.topicRequestQueryParams)
       .pipe(finalize(() => { this.isLoading = false }));
   }
 
