@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 
-interface SearchForm {
+interface SearchFormGroup {
   search: FormControl<string>;
 }
 
@@ -24,7 +24,7 @@ export class SearchBarComponent {
   @Output() public search = new EventEmitter<string>();
   @Output() public resetSearch = new EventEmitter<void>();
 
-  public searchForm = this.fb.nonNullable.group<SearchForm>({
+  public searchForm = this.fb.nonNullable.group<SearchFormGroup>({
     search: this.fb.nonNullable.control(''),
   });
 

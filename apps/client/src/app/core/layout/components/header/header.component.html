@@ -21,6 +21,12 @@
       </ul>
     </nav>
     <div class="auth-buttons">
+      <a
+        [routerLink]="['/topics/create']"
+        mat-raised-button
+        color="accent">
+        Create topic
+      </a>
       <ng-container *ngIf="isLoggedIn; else notLoggedInContent">
         <button
           (click)="logout()"

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
-import { TopicResponse, TopicsRequest, TopicsResponse, TopicWithAnswerResponse } from 'libs/api-interfaces';
+import { CreateTopic, TopicResponse, TopicsRequest, TopicsResponse, TopicWithAnswerResponse } from 'libs/api-interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -42,6 +42,15 @@ export class TopicService {
 
   public getTopicWithAnswersBySlug(slug: string): Observable<TopicWithAnswerResponse> {
     return this.httpClient.get<TopicWithAnswerResponse>(`/api/topics/${slug}`);
+  }
+
+  public createTopic(createTopicPayload: CreateTopic): Observable<TopicResponse> {
+    if (!this.authService.isLoggedIn) {
+      this.authService.showUnauthorizedSnackBar();
+      return this.authService.getUnauthorizedError$();
+    }
+
+    return this.httpClient.post<TopicResponse>(`/api/topics/`, createTopicPayload);
   }
 
 }

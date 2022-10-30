@@ -22,3 +22,6 @@ $light-theme: mat.define-light-theme(
 body {
   background: mat.get-color-from-palette($light-primary, 50);
 }
+.mat-simple-snackbar-action button {
+  color: mat.get-color-from-palette($light-warn, 300);
+}

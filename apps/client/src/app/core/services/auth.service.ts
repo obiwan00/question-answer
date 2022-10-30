@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { AuthorizedUser, CreateUser, LoginUser, UserAuthResponse } from '@qa/api-interfaces';
 import { LocalStorageKey } from '@qa/client/app/core/models/storage.model';
 import { LocalStorageService } from '@qa/client/app/core/services/storage.service';
@@ -19,7 +18,6 @@ export class AuthService {
     private httpClient: HttpClient,
     private localStorageService: LocalStorageService,
     private snackBar: MatSnackBar,
-    private router: Router,
   ) {
     this.initUser();
   }
@@ -62,7 +60,8 @@ export class AuthService {
   public showUnauthorizedSnackBar(): void {
     this.snackBar.open('You need to be logged in to do it', 'OK', {
       horizontalPosition: 'right',
-      verticalPosition: 'top',
+      verticalPosition: 'bottom',
+      duration: 3000,
     });
   }
 

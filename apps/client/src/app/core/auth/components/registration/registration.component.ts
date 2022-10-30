@@ -2,10 +2,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FormRegisterUser } from '@qa/client/app/core/models/auth.model';
+import { RegisterUserFormGroup } from '@qa/client/app/core/models/auth.model';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
 import { partialToRequiredGuard } from '@qa/client/app/core/utils/type-guard.util';
-import { CreateUser, LoginUser, UserAuthResponse } from 'libs/api-interfaces';
+import { CreateUser } from 'libs/api-interfaces';
 import { catchError, finalize, throwError } from 'rxjs';
 
 @Component({
@@ -18,7 +18,7 @@ export class RegistrationComponent {
   public isRegistrationDataSubmitting = false;
   public shouldHidePassword = true;
 
-  public registrationForm = this.fb.group<FormRegisterUser>({
+  public registrationForm = this.fb.group<RegisterUserFormGroup>({
     username: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(2)]),
     email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
     password: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(7)]),
@@ -68,13 +68,13 @@ export class RegistrationComponent {
       });
   }
 
-  public shouldShowErrorMessages(fieldName: keyof FormRegisterUser) {
+  public shouldShowErrorMessages(fieldName: keyof RegisterUserFormGroup) {
     const control = this.registrationForm.get(fieldName);
 
     return control?.invalid && (control.dirty || control.touched)
   }
 
-  public getFieldErrorsKeys(fieldName: keyof FormRegisterUser): ValidationErrors | null | undefined {
+  public getFieldErrorsKeys(fieldName: keyof RegisterUserFormGroup): ValidationErrors | null | undefined {
     return this.registrationForm.get(fieldName)?.errors;
   }
 }

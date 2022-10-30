@@ -2,12 +2,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FormLoginUser } from '@qa/client/app/core/models/auth.model';
+import { LoginUserFormGroup } from '@qa/client/app/core/models/auth.model';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
 import { partialToRequiredGuard } from '@qa/client/app/core/utils/type-guard.util';
-import { LoginUser, UserAuthResponse } from 'libs/api-interfaces';
+import { LoginUser } from 'libs/api-interfaces';
 import { catchError, finalize, throwError } from 'rxjs';
-
 
 
 @Component({
@@ -20,7 +19,7 @@ export class LoginComponent {
   public isLoginDataSubmitting = false;
   public shouldHidePassword = true;
 
-  public loginForm = this.fb.group<FormLoginUser>({
+  public loginForm = this.fb.group<LoginUserFormGroup>({
     email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
     password: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(7)]),
   });
@@ -69,13 +68,13 @@ export class LoginComponent {
       });
   }
 
-  public shouldShowErrorMessages(fieldName: keyof FormLoginUser) {
+  public shouldShowErrorMessages(fieldName: keyof LoginUserFormGroup) {
     const control = this.loginForm.get(fieldName);
 
     return control?.invalid && (control.dirty || control.touched)
   }
 
-  public getFieldErrorsKeys(fieldName: keyof FormLoginUser): ValidationErrors | null | undefined {
+  public getFieldErrorsKeys(fieldName: keyof LoginUserFormGroup): ValidationErrors | null | undefined {
     return this.loginForm.get(fieldName)?.errors;
   }
 
