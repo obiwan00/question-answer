@@ -1,37 +1,40 @@
-import { Component, OnDestroy } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '@qa/client/app/core/services/auth.service';
 import { TopicService } from '@qa/client/app/core/services/topic.service';
-import { CreateTopic } from 'libs/api-interfaces';
+import { TopicWithAnswers, UpdateTopic } from 'libs/api-interfaces';
 import { finalize, ReplaySubject, takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
 
-interface CreateTopicFormGroup {
+interface EditTopicFormGroup {
   title: FormControl<string>;
   body: FormControl<string>;
   tags: FormControl<string | null>;
 }
 
 @Component({
-  templateUrl: './create-topic.component.html',
-  styleUrls: ['./create-topic.component.scss'],
+  templateUrl: './edit-topic.component.html',
+  styleUrls: ['./edit-topic.component.scss'],
 })
-export class CreateTopicComponent implements OnDestroy {
+export class EditTopicComponent implements OnInit, OnDestroy {
 
   public readonly maxTitleLength = 100;
   public readonly maxBodyLength = 2000;
   public readonly maxTagsCount = 8;
 
-  public createTopicForm = this.fb.nonNullable.group<CreateTopicFormGroup>({
+  public editTopicForm = this.fb.group<EditTopicFormGroup>({
     title: this.fb.nonNullable.control('', [Validators.required]),
     body: this.fb.nonNullable.control('', [Validators.required]),
     tags: this.fb.control(null),
   });
 
   public tags: string[] = [];
-  public isCreating = false;
+  public isEditing = false;
+  public topicWithAnswers: TopicWithAnswers;
+  public isLoadingTopic = false;
 
   public readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
@@ -42,30 +45,38 @@ export class CreateTopicComponent implements OnDestroy {
     private snackBar: MatSnackBar,
     private topicService: TopicService,
     private router: Router,
+    private route: ActivatedRoute,
+    private authService: AuthService,
   ) {
 
   }
+
+  public ngOnInit(): void {
+    this.topicWithAnswers = this.route.snapshot.data['topicWithAnswers'];
+    this.setTopicDataToFormVales()
+  }
+
 
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.unsubscribe();
   }
 
-  public createTopic(): void {
-    const createTopicPayload: CreateTopic = {
-      title: this.createTopicForm.get('title')!.value,
-      body: this.createTopicForm.get('body')!.value,
+  public editTopic(): void {
+    const editTopicPayload: UpdateTopic = {
+      title: this.editTopicForm.get('title')!.value,
+      body: this.editTopicForm.get('body')!.value,
       tags: this.tags,
-    }
+    };
 
-    this.isCreating = true;
-    this.topicService.createTopic(createTopicPayload)
+    this.isEditing = true;
+    this.topicService.editTopic(this.topicWithAnswers.slug, editTopicPayload)
       .pipe(
-        finalize(() => this.isCreating = false),
+        finalize(() => this.isEditing = false),
         takeUntil(this.destroy$),
       )
       .subscribe(() => {
-        this.showSnackBarForSuccessfulCreating()
+        this.showSnackBarForSuccessfulEditing();
         this.router.navigate(['/']);
       });
   }
@@ -89,7 +100,7 @@ export class CreateTopicComponent implements OnDestroy {
     this.tags.push(value);
     event.chipInput.clear();
 
-    this.createTopicForm.get('tags')?.setValue(null);
+    this.editTopicForm.get('tags')?.setValue(null);
   }
 
   public removeTag(tag: string): void {
@@ -101,7 +112,7 @@ export class CreateTopicComponent implements OnDestroy {
   }
 
   public get isSubmitDisabled(): boolean {
-    return !this.createTopicForm.valid || this.isCreating
+    return !this.editTopicForm.valid || this.isEditing;
   }
 
   private showSnackBarForSameTagAdding(): void {
@@ -112,11 +123,19 @@ export class CreateTopicComponent implements OnDestroy {
     });
   }
 
-  private showSnackBarForSuccessfulCreating(): void {
-    this.snackBar.open('Your topic was successfully created', '', {
+  private showSnackBarForSuccessfulEditing(): void {
+    this.snackBar.open('Your topic was successfully updated', '', {
       horizontalPosition: 'right',
       verticalPosition: 'bottom',
       duration: 3000,
     });
+  }
+
+  private setTopicDataToFormVales(): void {
+    this.editTopicForm.patchValue({
+      title: this.topicWithAnswers.title,
+      body: this.topicWithAnswers.body,
+    })
+    this.tags = this.topicWithAnswers.tags;
   }
 }

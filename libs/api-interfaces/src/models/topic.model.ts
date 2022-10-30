@@ -32,18 +32,16 @@ export interface TopicsResponse {
   topics: TopicResponse[];
 }
 
-export interface TopicWithAnswerResponse extends TopicResponse {
+export interface TopicWithAnswersResponse extends TopicResponse {
   answers: AnswerResponse[];
 }
+
+export type TopicWithAnswers = TopicWithAnswersResponse;
 
 export enum LikeStatus {
   DISLIKED = 'DISLIKED',
   NEUTRAL = 'NEUTRAL',
   LIKED = 'LIKED',
-}
-
-export interface TopicWithLikeStatusResponse extends TopicResponse {
-  likeStatus: LikeStatus;
 }
 
 export interface CreateTopic {

@@ -15,8 +15,9 @@ import { TopicsFeedComponent } from './components/topics-feed/topics-feed.compon
 import { TopicRoutingModule } from './topic-routing.module';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { EditTopicComponent } from '@qa/client/app/topic/components/edit-topic/edit-topic.component';
 
-const COMPONENTS = [TopicsFeedComponent, TopicComponent, TopicSingleComponent, CreateTopicComponent];
+const COMPONENTS = [TopicsFeedComponent, TopicComponent, TopicSingleComponent, CreateTopicComponent, EditTopicComponent];
 
 const MAT_MODULES = [
   MatButtonModule,

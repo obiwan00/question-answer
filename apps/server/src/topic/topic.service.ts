@@ -2,7 +2,7 @@ import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nest
 import { InjectRepository } from '@nestjs/typeorm';
 import { AnswerService } from '@qa/server/answer/answer.service';
 import { TagService } from '@qa/server/tag/tag.service';
-import { CreateTopicDto, TopicResponseDto, TopicsResponseDto, TopicWithAnswerResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
+import { CreateTopicDto, TopicResponseDto, TopicsResponseDto, TopicWithAnswersResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
 import { TopicEntity } from '@qa/server/topic/topic.entity';
 import { UserEntity } from '@qa/server/user/user.entity';
 import { UserService } from '@qa/server/user/user.service';
@@ -150,7 +150,7 @@ export class TopicService {
     return topicBySlug;
   }
 
-  public async getTopicBySlugWithAnswers(slug: string, currentUserId?: number): Promise<TopicWithAnswerResponseDto> {
+  public async getTopicBySlugWithAnswers(slug: string, currentUserId?: number): Promise<TopicWithAnswersResponseDto> {
     const topicById = await this.findTopicBySlug(slug);
 
     const answers = await this.answerServices.findAnswersForTopic(topicById.id, currentUserId)
@@ -163,8 +163,8 @@ export class TopicService {
     };
   }
 
-  public async deleteTopicById(currentUserId: number, topicId: number): Promise<DeleteResult> {
-    const topicToDelete = await this.findTopicById(topicId);
+  public async deleteTopicById(currentUserId: number, topicSlug: string): Promise<DeleteResult> {
+    const topicToDelete = await this.findTopicBySlug(topicSlug);
 
     if (topicToDelete.author.id !== currentUserId) {
       throw new HttpException("You don't have rights to delete this topic", HttpStatus.FORBIDDEN);
@@ -174,8 +174,8 @@ export class TopicService {
     return await this.topicRepository.delete(topicToDelete);
   }
 
-  public async updateTopicById(currentUserId: number, topicId: number, updateTopicDto: UpdateTopicDto): Promise<TopicEntity> {
-    const topicToUpdate = await this.findTopicById(topicId);
+  public async updateTopicById(currentUserId: number, topicSlug: string, updateTopicDto: UpdateTopicDto): Promise<TopicEntity> {
+    const topicToUpdate = await this.findTopicBySlug(topicSlug);
 
     if (topicToUpdate.author.id !== currentUserId) {
       throw new HttpException("You don't have rights to update this topic", HttpStatus.FORBIDDEN);

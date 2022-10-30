@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { AnswerResponseDto } from "@qa/server/answer/dto/answer.dto";
 import { UserResponseDto } from "@qa/server/user/dto/user.dto";
 import { IsArray, IsNotEmpty, IsString } from "class-validator";
-import { CreateTopic, LikeStatus, TopicResponse, TopicsRequest, TopicsResponse, TopicWithAnswerResponse as TopicWithAnswersResponse, UpdateTopic } from "libs/api-interfaces";
+import { CreateTopic, LikeStatus, TopicResponse, TopicsRequest, TopicsResponse, TopicWithAnswersResponse, UpdateTopic } from "libs/api-interfaces";
 
 export class CreateTopicDto implements CreateTopic {
   @ApiProperty()
@@ -62,7 +62,7 @@ export class TopicResponseDto implements TopicResponse {
   answersCount: number;
 }
 
-export class TopicWithAnswerResponseDto extends TopicResponseDto implements TopicWithAnswersResponse {
+export class TopicWithAnswersResponseDto extends TopicResponseDto implements TopicWithAnswersResponse {
   @ApiProperty({ isArray: true, type: AnswerResponseDto })
   @ApiPropertyOptional()
   answers: AnswerResponseDto[];

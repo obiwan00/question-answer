@@ -11,8 +11,13 @@
     flex-shrink: 0;
   }
 
-  &__main {
+  &__main-content {
     flex-grow: 1;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
   }
 
   &__title {
@@ -29,7 +34,7 @@
     margin-bottom: 20px;
   }
 
-  &__secondary {
+  &__footer {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;

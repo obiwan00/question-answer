@@ -12,7 +12,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   public intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
-    const jwtToken = this.authService.getUser()?.token;
+    const jwtToken = this.authService.user?.token;
 
     if (!jwtToken) {
       return next.handle(req);

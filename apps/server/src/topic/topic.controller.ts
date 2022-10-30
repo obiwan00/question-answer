@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CreateTopicDto, TopicResponseDto, TopicsRequestDto, TopicsResponseDto, TopicWithAnswerResponseDto as TopicWithAnswersResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
+import { CreateTopicDto, TopicResponseDto, TopicsRequestDto, TopicsResponseDto, TopicWithAnswersResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
 import { TopicService } from '@qa/server/topic/topic.service';
 import { User } from '@qa/server/user/decorators/user.decorator';
 import { AuthGuard } from '@qa/server/user/guards/user.guard';
@@ -40,23 +40,23 @@ export class TopicController {
     return await this.topicService.getTopicBySlugWithAnswers(slug, currentUserId);
   }
 
-  @Delete(':topicId')
+  @Delete(':slug')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  public async deleteTopicBySlug(@User('id') currentUserId: number, @Param('topicId') topicId: string): Promise<DeleteResult> {
-    return await this.topicService.deleteTopicById(currentUserId, +topicId);
+  public async deleteTopicBySlug(@User('id') currentUserId: number, @Param('slug') slug: string): Promise<DeleteResult> {
+    return await this.topicService.deleteTopicById(currentUserId, slug);
   }
 
-  @Put(':topicId')
+  @Put(':slug')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: TopicResponseDto })
   public async updateTopicById(
     @User('id') currentUserId: number,
-    @Param('topicId') topicId: string,
+    @Param('slug') slug: string,
     @Body() updateTopicDto: UpdateTopicDto,
   ): Promise<TopicResponseDto> {
-    const topic = await this.topicService.updateTopicById(currentUserId, +topicId, updateTopicDto);
+    const topic = await this.topicService.updateTopicById(currentUserId, slug, updateTopicDto);
     return this.topicService.buildTopicResponse({ topic, currentUserId });
   }
 

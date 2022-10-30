@@ -6,13 +6,22 @@
     [likeStatus]="topic.likeStatus"
     (like)="likeTopic()"
     (dislike)="dislikeTopic()"></qa-rating>
-  <main class="topic__main">
-    <h2 class="topic__title">
-      <a [routerLink]="['/', 'topics', topic.slug]">{{ topic.title }}</a>
-    </h2>
+  <div class="topic__main-content">
+    <header class="topic__header">
+      <h2 class="topic__title">
+        <a [routerLink]="['/', 'topics', topic.slug]">{{ topic.title }}</a>
+      </h2>
+      <button
+        *ngIf="isCurrentUserTopicAuthor"
+        (click)="editTopic()"
+        mat-icon-button
+        color="accent">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </header>
     <h3 class="topic__author">Author: {{ topic.author.username }}</h3>
     <p class="topic__body mat-h3">{{ topic.body }}</p>
-    <div class="topic__secondary">
+    <footer class="topic__footer">
       <div>
         <div class="topic__tags tags">
           Tags:
@@ -40,6 +49,6 @@
           </time>
           </li>
       </ul>
-    </div>
-  </main>
+    </footer>
+  </div>
 </mat-card>

@@ -49,12 +49,12 @@ export class AuthService {
       );
   }
 
-  public getUser(): AuthorizedUser | null {
+  public get user(): AuthorizedUser | null {
     return this.user$$.value;
   }
 
   public get isLoggedIn(): boolean {
-    return !!this.getUser();
+    return !!this.user;
   }
 
   public showUnauthorizedSnackBar(): void {
