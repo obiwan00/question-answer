@@ -91,10 +91,15 @@ export class TopicService {
     },
   ): Promise<TopicResponseDto> {
     currentUserWithLikeStatus = currentUserWithLikeStatus || await this.userService.getUserByIdWithTopicLikeStatus(currentUserId);
+    currentUserId = currentUserId ?? currentUserWithLikeStatus?.id;
+
+
     const likeStatus = this.getTopicLikeStatus(topic.id, currentUserWithLikeStatus);
 
     const answersForTopic = await this.answerServices.findAnswersForTopic(topic.id);
     const hasAcceptedAnswer = !!answersForTopic.find(answer => answer.accepted);
+
+    const isCurrentUserTopicAuthor = topic.author.id === currentUserId;
 
     return {
       ...topic,
@@ -102,6 +107,7 @@ export class TopicService {
       likeStatus,
       hasAcceptedAnswer,
       answersCount: answersForTopic.length,
+      isCurrentUserTopicAuthor,
     };
   }
 

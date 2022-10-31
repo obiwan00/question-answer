@@ -15,29 +15,46 @@
       ✅
     </div>
   </div>
-  <main class="answer__main">
-    <h3 class="answer__author">Author: {{ answer.author.username }}</h3>
+  <div class="answer__main-content">
+    <header class="answer__header">
+      <h3 class="answer__author">Author: {{ answer.author.username }}</h3>
+      <div class="answer__action-buttons">
+        <button
+          *ngIf="answer.isCurrentUserAnswerAuthor"
+          (click)="editAnswer()"
+          mat-icon-button
+          aria-label="edit answer"
+          color="accent">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          *ngIf="showAcceptButton"
+          color="accent"
+          mat-icon-button
+          [attr.aria-label]="answer.accepted ? 'Unaccepted answer' : 'Accept answer'"
+          [attr.title]="answer.accepted ? 'Unaccepted answer' : 'Accept answer'"
+          (click)="acceptAnswer()"
+          [disabled]="isDisabled">
+          <mat-icon>
+            {{answer.accepted ? 'unpublished' : 'check_circle'}}
+          </mat-icon>
+        </button>
+      </div>
+    </header>
     <p class="answer__body mat-h3">{{ answer.body }}</p>
-    <ul class="answer__dates">
-      <li>
-            <time [dateTime]="answer.createdAt">
-          Created at: {{ answer.createdAt | date }}
-        </time>
-          </li>
-      <li>
-            <time [dateTime]="answer.updatedAt">
-          Updated at: {{ answer.updatedAt | date }}
-        </time>
-          </li>
-    </ul>
-    <button
-      *ngIf="showAcceptButton"
-      mat-raised-button
-      color="accent"
-      class="answer__accept-btn"
-      (click)="handleAcceptAnswerClick()"
-      [disabled]="isDisabled">
-      {{answer.accepted ? 'Unaccepted answer ☑️' : 'Accept answer ✅'}}
-    </button>
-  </main>
+    <footer class="answer__footer">
+      <ul class="answer__dates">
+        <li>
+              <time [dateTime]="answer.createdAt">
+            Created at: {{ answer.createdAt | date:'medium' }}
+          </time>
+            </li>
+        <li>
+              <time [dateTime]="answer.updatedAt">
+            Updated at: {{ answer.updatedAt | date:'medium' }}
+          </time>
+            </li>
+      </ul>
+    </footer>
+  </div>
 </mat-card>

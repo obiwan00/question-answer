@@ -3,24 +3,53 @@
   <ng-container *ngIf="topicWithAnswers">
     <qa-topic [topic]="topicWithAnswers"></qa-topic>
     <section class="answers">
-      <h3
-        class="answers__title"
-        *ngIf="topicWithAnswers.answers.length !== 0; else noAnswers">
-        Answers:
-      </h3>
-      <ng-template #noAnswers>
-        <h3>
-          There is no answers yet =(
+      <div class="answers__actions">
+        <button
+          *ngIf="!isShowingCreateAnswer"
+          mat-raised-button
+          color="accent"
+          (click)="handleAddNewAnswerClick()">
+          Add your answer
+          <mat-icon>post_add</mat-icon>
+        </button>
+      </div>
+      <header class="answers__header">
+        <h3
+          class="answers__title"
+          *ngIf="topicWithAnswers.answers.length !== 0; else noAnswers">
+          Answers:
         </h3>
-      </ng-template>
-      <qa-answer
-        class="answers__item"
-        *ngFor="let answer of topicWithAnswers.answers"
-        [answer]="answer"
-        [showAcceptButton]="isCurrentUserTopicAuthor"
-        [disabled]="isAnswersLoading"
-        (acceptAnswer)="acceptAnswerById($event)"
-        (loading)="handleAnswerLoading($event)"></qa-answer>
+        <ng-template #noAnswers>
+          <h3 class="answers__title">
+          There is no any answer yet =(
+        </h3>
+        </ng-template>
+      </header>
+      <main class="answers__main">
+        <qa-create-answer
+          *ngIf="isShowingCreateAnswer"
+          (cancel)="handleCancelCreateAnswer()"
+          (create)="handleCreateNewAnswer($event)"
+          [topicId]="topicWithAnswers.id"></qa-create-answer>
+        <ng-container *ngFor="let answer of topicWithAnswers.answers">
+          <qa-answer
+            *ngIf="answer.id !== answerToEditId; else editAnswer"
+            class="answers__item"
+            [answer]="answer"
+            [disabled]="isAnswersLoading"
+            [showAcceptButton]="topicWithAnswers.isCurrentUserTopicAuthor"
+            (accept)="acceptAnswerById($event)"
+            (edit)="editAnswerById($event)"
+            (loading)="handleAnswerLoading($event)"></qa-answer>
+          <ng-template #editAnswer>
+            <qa-edit-answer
+              class="answers__item"
+              [answer]="answer"
+              (cancel)="handleCancelEditAnswer()"
+              (edit)="handleEditAnswer($event)"></qa-edit-answer>
+          </ng-template>
+        </ng-container>
+      </main>
     </section>
   </ng-container>
 </div>

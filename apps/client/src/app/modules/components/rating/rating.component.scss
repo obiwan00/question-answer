@@ -1,5 +1,4 @@
-@use "@angular/material" as mat;
-@import "theme";
+@import "theme-variables";
 
 :host {
   display: flex;
@@ -14,15 +13,16 @@
 button {
   cursor: pointer;
   background: transparent;
-  border: 1px solid black;
   border-radius: 2px;
   line-height: 1.5;
+  border: 0;
+  background-color: $rating-default-background;
 
   &.liked {
-    background-color: mat.get-color-from-palette($light-accent, 400);
+    background-color: $rating-liked-background;
   }
 
   &.disliked {
-    background-color: mat.get-color-from-palette($light-warn, 400);
+    background-color: $rating-disliked-background;
   }
 }

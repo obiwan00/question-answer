@@ -12,9 +12,10 @@
         <a [routerLink]="['/', 'topics', topic.slug]">{{ topic.title }}</a>
       </h2>
       <button
-        *ngIf="isCurrentUserTopicAuthor"
+        *ngIf="topic.isCurrentUserTopicAuthor"
         (click)="editTopic()"
         mat-icon-button
+        aria-label="edit topic"
         color="accent">
         <mat-icon>edit</mat-icon>
       </button>
@@ -34,18 +35,20 @@
           </ul>
         </div>
         <p>
-          Answers count: {{topic.answersCount}} {{topic.hasAcceptedAnswer ? '(has accepted ✅)' : null}}
+          Answers count:
+          {{ topic.answersCount}}
+          {{topic.hasAcceptedAnswer ? '(has accepted ✅)' : null}}
         </p>
       </div>
       <ul class="topic__dates">
         <li>
             <time [dateTime]="topic.createdAt">
-            Created at: {{ topic.createdAt | date }}
+            Created at: {{ topic.createdAt | date:'medium' }}
           </time>
           </li>
         <li>
             <time [dateTime]="topic.updatedAt">
-            Updated at: {{ topic.updatedAt | date }}
+            Updated at: {{ topic.updatedAt | date:'medium' }}
           </time>
           </li>
       </ul>

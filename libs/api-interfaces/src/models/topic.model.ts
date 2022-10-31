@@ -20,6 +20,7 @@ export interface TopicResponse {
   tags: string[];
   hasAcceptedAnswer: boolean,
   answersCount: number;
+  isCurrentUserTopicAuthor: boolean;
 }
 
 export type Topic = TopicResponse;

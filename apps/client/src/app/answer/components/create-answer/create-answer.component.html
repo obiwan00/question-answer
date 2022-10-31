@@ -1,0 +1,34 @@
+<qa-spinner [active]="isCreating"></qa-spinner>
+<form
+  class="create-answer-form"
+  (ngSubmit)="createAnswer()"
+  [formGroup]="createAnswerForm">
+  <mat-card class="create-answer-form__card">
+    <h2 class="mat-h2 create-answer-form__title">Create answer</h2>
+    <mat-form-field appearance="outline">
+      <mat-label>Answer</mat-label>
+      <textarea
+        matInput
+        rows="8"
+        [maxLength]="maxBodyLength"
+        formControlName="body">
+      </textarea>
+      <mat-hint align="end">
+        {{createAnswerForm.get('body')?.value?.length}} / {{maxBodyLength}}
+      </mat-hint>
+    </mat-form-field>
+    <mat-card-actions align="end">
+      <button
+        (click)="handleCancelClick()"
+        mat-raised-button>
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="isSubmitDisabled">
+        Create topic
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

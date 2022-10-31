@@ -1,27 +1,21 @@
 @use "@angular/material" as mat;
 
+// material config
 @include mat.core();
-
-$my-palette: mat.$deep-purple-palette;
 
 $light-primary: mat.define-palette(mat.$deep-purple-palette);
 $light-accent: mat.define-palette(mat.$indigo-palette);
 $light-warn: mat.define-palette(mat.$red-palette);
+$light-success: mat.define-palette(mat.$green-palette);
 $light-theme: mat.define-light-theme(
   (
     color: (
       primary: $light-primary,
       accent: $light-accent,
       warn: $light-warn,
+      success: $light-success,
     ),
   )
 );
 
 @include mat.all-component-colors($light-theme);
-
-body {
-  background: mat.get-color-from-palette($light-primary, 50);
-}
-.mat-simple-snackbar-action button {
-  color: mat.get-color-from-palette($light-warn, 300);
-}

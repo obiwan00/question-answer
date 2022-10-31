@@ -1,0 +1,23 @@
+@use "@angular/material" as mat;
+@import "theme-config";
+
+// theme variables
+$app-body-background: mat.get-color-from-palette($light-primary, 50);
+$app-header-color: mat.get-color-from-palette($light-primary, 100);
+$app-header-active-link-color: mat.get-color-from-palette($light-accent, 800);
+$app-footer-color: mat.get-color-from-palette($light-primary, 100);
+
+$rating-default-background: mat.get-color-from-palette($light-accent, 50);
+$rating-liked-background: mat.get-color-from-palette($light-accent, 400);
+$rating-disliked-background: mat.get-color-from-palette($light-warn, 400);
+
+$spinnerColor: mat.get-color-from-palette($light-primary);
+$backgroundColor: rgba(mat.get-color-from-palette($light-primary, 100), 0.7);
+
+$accent-field-background: rgba(mat.get-color-from-palette($light-accent, 50), 0.4);
+$accent-field-border: mat.get-color-from-palette($light-accent, 100);
+
+$snackbar-action-button-color: mat.get-color-from-palette($light-warn, 300);
+
+$tag-item-background: mat.get-color-from-palette($light-accent, 100);
+$tag-item-border: mat.get-color-from-palette($light-accent, 800);

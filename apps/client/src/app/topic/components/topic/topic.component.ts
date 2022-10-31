@@ -1,8 +1,7 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '@qa/client/app/core/services/auth.service';
-import { TopicService } from '@qa/client/app/core/services/topic.service';
 import { Topic } from '@qa/api-interfaces';
+import { TopicService } from '@qa/client/app/core/services/topic.service';
 import { finalize, ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
@@ -10,23 +9,17 @@ import { finalize, ReplaySubject, takeUntil } from 'rxjs';
   templateUrl: './topic.component.html',
   styleUrls: ['./topic.component.scss'],
 })
-export class TopicComponent implements OnInit, OnDestroy {
+export class TopicComponent implements OnDestroy {
 
   @Input() public topic: Topic;
 
   public isUpdating = false;
-  public isCurrentUserTopicAuthor: boolean;
   private destroy$ = new ReplaySubject<void>();
 
   public constructor(
     private topicService: TopicService,
-    private authService: AuthService,
     private router: Router,
   ) {
-  }
-
-  public ngOnInit(): void {
-    this.isCurrentUserTopicAuthor = this.topic.author.id === this.authService.user?.id;
   }
 
   public ngOnDestroy(): void {

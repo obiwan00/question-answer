@@ -1,0 +1,10 @@
+.create-answer-form {
+  &__card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    text-align: left;
+  }
+}

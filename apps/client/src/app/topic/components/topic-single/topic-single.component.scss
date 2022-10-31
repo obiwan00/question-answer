@@ -3,6 +3,20 @@
   margin-left: auto;
   max-width: 95%;
 
+  button {
+    mat-icon {
+      font-size: 20px;
+    }
+  }
+
+  &__actions {
+    margin-bottom: 16px;
+  }
+
+  &__header {
+    margin-bottom: 20px;
+  }
+
   &__title {
     font-size: 20px;
   }

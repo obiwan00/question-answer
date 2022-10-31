@@ -1,0 +1,20 @@
+@import "theme-variables";
+
+// app
+body {
+  background: $app-body-background;
+}
+
+// material
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-radius: 5px;
+  background-color: $accent-field-background;
+}
+
+.mat-simple-snackbar-action button {
+  color: $snackbar-action-button-color;
+}
+
+.mat-card {
+  border: 2px solid black;
+}

@@ -1,18 +1,18 @@
-import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { AnswerResponse, CreateAnswer, LikeStatus, UpdateAnswer } from "@qa/api-interfaces";
 import { UserResponseDto } from '@qa/server/user/dto/user.dto';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { AnswerResponse, CreateAnswer, LikeStatus, UpdateAnswer } from "@qa/api-interfaces";
 
 export class CreateAnswerDto implements CreateAnswer {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  body: string;
+  public body: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  topicId: number;
+  public topicId: number;
 }
 
 export class UpdateAnswerDto extends PickType(CreateAnswerDto, ['body']) implements UpdateAnswer { }
@@ -20,26 +20,29 @@ export class UpdateAnswerDto extends PickType(CreateAnswerDto, ['body']) impleme
 
 export class AnswerResponseDto implements AnswerResponse {
   @ApiProperty()
-  id: number;
+  public id: number;
 
   @ApiProperty()
-  accepted: boolean;
+  public accepted: boolean;
 
   @ApiProperty()
-  likesCount: number;
+  public likesCount: number;
 
   @ApiProperty()
-  body: string;
+  public body: string;
 
   @ApiProperty()
-  author: UserResponseDto;
+  public author: UserResponseDto;
 
   @ApiProperty()
-  createdAt: Date;
+  public createdAt: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  public updatedAt: Date;
 
   @ApiProperty({ enum: LikeStatus })
-  likeStatus: LikeStatus;
+  public likeStatus: LikeStatus;
+
+  @ApiProperty()
+  public isCurrentUserAnswerAuthor: boolean;
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
-import { AnswerResponse } from '@qa/api-interfaces';
+import { AnswerResponse, CreateAnswer, UpdateAnswer } from '@qa/api-interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -39,6 +39,24 @@ export class AnswerService {
     }
 
     return this.httpClient.post<AnswerResponse[]>(`/api/answers/${answerId}`, null);
+  }
+
+  public createAnswer(createAnswerPayload: CreateAnswer): Observable<AnswerResponse> {
+    if (!this.authService.isLoggedIn) {
+      this.authService.showUnauthorizedSnackBar();
+      return this.authService.getUnauthorizedError$();
+    }
+
+    return this.httpClient.post<AnswerResponse>(`/api/answers/`, createAnswerPayload);
+  }
+
+  public editAnswer(answerId: number, editAnswerPayload: UpdateAnswer): Observable<AnswerResponse> {
+    if (!this.authService.isLoggedIn) {
+      this.authService.showUnauthorizedSnackBar();
+      return this.authService.getUnauthorizedError$();
+    }
+
+    return this.httpClient.put<AnswerResponse>(`/api/answers/${answerId}`, editAnswerPayload);
   }
 
 }

@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
 import { AppRoutingModule } from '@qa/client/app/app-routing.module';
 import { FooterComponent } from '@qa/client/app/core/layout/components/footer/footer.component';
 import { HeaderComponent } from '@qa/client/app/core/layout/components/header/header.component';
@@ -12,10 +11,6 @@ const COMPONENTS = [
   FooterComponent,
 ];
 
-const MAT_MODULES = [
-  MatButtonModule,
-];
-
 @NgModule({
   declarations: [
     ...COMPONENTS,
@@ -24,7 +19,6 @@ const MAT_MODULES = [
     CommonModule,
     AppRoutingModule,
     SharedModule,
-    ...MAT_MODULES,
   ],
   exports: [
     ...COMPONENTS,

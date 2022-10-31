@@ -65,11 +65,16 @@ export class AnswerService {
     currentUserWithLikeStatus?: UserEntity,
   }): Promise<AnswerResponseDto> {
     currentUserWithLikeStatus = currentUserWithLikeStatus || await this.userService.getUserByIdWithAnswerLikeStatus(currentUserId);
+    currentUserId = currentUserId ?? currentUserWithLikeStatus?.id;
+
     const likeStatus = this.getAnswerLikeStatus(answer.id, currentUserWithLikeStatus);
+    const isCurrentUserAnswerAuthor = answer.author.id === currentUserId;
+
 
     return {
       ...answer,
       likeStatus,
+      isCurrentUserAnswerAuthor,
     };
   }
 
@@ -155,7 +160,7 @@ export class AnswerService {
       relations: ['topic'],
     });
 
-    if (answerToAccept.author.id !== currentUserId) {
+    if (answerToAccept.topic.author.id !== currentUserId) {
       throw new HttpException("You don't have rights to accept this answer", HttpStatus.FORBIDDEN);
     }
 

@@ -1,3 +1,5 @@
+@import "theme-variables";
+
 .answer {
   display: flex;
 
@@ -23,29 +25,41 @@
     font-size: 22px;
   }
 
-  &__main {
+  &__main-content {
     flex-grow: 1;
   }
 
-  &__author {
-    font-size: 18px;
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 16px;
   }
 
+  &__author {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
   &__body {
-    margin-bottom: 20px;
+    white-space: pre;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid $accent-field-border;
+    background-color: $accent-field-background;
+  }
+
+  &__footer {
+    margin-top: 24px;
   }
 
   &__dates {
     display: flex;
+    justify-content: end;
     color: gray;
 
     li {
-      margin-right: 10px;
+      margin-right: 16px;
     }
-  }
-
-  &__accept-btn {
-    margin-top: 15px;
   }
 }

@@ -14,7 +14,8 @@ export class AnswerComponent implements OnDestroy {
   @Input() public showAcceptButton: boolean;
   @Input() public disabled: boolean;
 
-  @Output() public acceptAnswer = new EventEmitter<number>();
+  @Output() public accept = new EventEmitter<number>();
+  @Output() public edit = new EventEmitter<number>();
   @Output() public loading = new EventEmitter<boolean>();
 
   public _isLoading = false;
@@ -66,7 +67,11 @@ export class AnswerComponent implements OnDestroy {
       }));
   }
 
-  public handleAcceptAnswerClick(): void {
-    this.acceptAnswer.emit(this.answer.id);
+  public editAnswer(): void {
+    this.edit.emit(this.answer.id);
+  }
+
+  public acceptAnswer(): void {
+    this.accept.emit(this.answer.id);
   }
 }

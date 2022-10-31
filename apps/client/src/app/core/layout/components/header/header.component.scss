@@ -1,9 +1,9 @@
-@use "@angular/material" as mat;
-@import "theme";
+@import "theme-variables";
 
 header {
+  border-bottom: 2px solid black;
   padding: 5px 0;
-  background: mat.get-color-from-palette($light-primary, 100);
+  background: $app-header-color;
 }
 
 .container {
@@ -29,7 +29,7 @@ header {
 
     &.active {
       text-decoration: underline;
-      color: mat.get-color-from-palette($light-accent, 500);
+      color: $app-header-active-link-color;
     }
   }
 }

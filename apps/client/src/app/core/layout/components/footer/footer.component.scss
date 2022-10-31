@@ -1,9 +1,9 @@
-@use "@angular/material" as mat;
-@import "theme";
+@import "theme-variables";
 
 footer {
+  border-top: 2px solid black;
   padding: 20px 0;
-  background: mat.get-color-from-palette($light-primary, 100);
+  background: $app-footer-color;
 }
 
 .container {

@@ -26,75 +26,78 @@ export class UpdateTopicDto extends CreateTopicDto implements UpdateTopic {
 
 export class TopicResponseDto implements TopicResponse {
   @ApiProperty()
-  id: number;
+  public id: number;
 
   @ApiProperty()
-  slug: string;
+  public slug: string;
 
   @ApiProperty()
-  likesCount: number;
+  public likesCount: number;
 
   @ApiProperty()
-  title: string;
+  public title: string;
 
   @ApiProperty()
-  body: string;
+  public body: string;
 
   @ApiProperty()
-  tags: string[];
+  public tags: string[];
 
   @ApiProperty()
-  author: UserResponseDto;
+  public author: UserResponseDto;
 
   @ApiProperty()
-  createdAt: Date;
+  public createdAt: Date;
 
   @ApiProperty()
-  updatedAt: Date;
+  public updatedAt: Date;
 
   @ApiProperty({ enum: LikeStatus })
-  likeStatus: LikeStatus;
+  public likeStatus: LikeStatus;
 
   @ApiProperty()
-  hasAcceptedAnswer: boolean;
+  public hasAcceptedAnswer: boolean;
 
   @ApiProperty()
-  answersCount: number;
+  public answersCount: number;
+
+  @ApiProperty()
+  public isCurrentUserTopicAuthor: boolean;
 }
 
 export class TopicWithAnswersResponseDto extends TopicResponseDto implements TopicWithAnswersResponse {
   @ApiProperty({ isArray: true, type: AnswerResponseDto })
   @ApiPropertyOptional()
-  answers: AnswerResponseDto[];
+  public answers: AnswerResponseDto[];
 }
 
 export class TopicsResponseDto implements TopicsResponse {
   @ApiProperty({ isArray: true, type: TopicResponseDto })
-  topics: TopicResponseDto[];
+  public topics: TopicResponseDto[];
 
   @ApiProperty()
-  count: number;
+  public count: number;
 
   @ApiProperty()
-  limit: number;
+  public limit: number;
 
   @ApiProperty()
-  offset: number;
+  public offset: number;
 }
 
 export class TopicsRequestDto implements TopicsRequest {
   @ApiPropertyOptional()
-  offset?: number;
+  public offset?: number;
 
   @ApiPropertyOptional()
-  limit?: number;
+  public limit?: number;
 
   @ApiPropertyOptional({
     isArray: true,
     type: 'string',
   })
-  tags?: string[];
+  public tags?: string[];
 
   @ApiPropertyOptional()
-  search?: string;
+  public search?: string;
 }

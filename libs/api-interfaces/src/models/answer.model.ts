@@ -16,6 +16,7 @@ export interface AnswerResponse {
   createdAt: Date;
   updatedAt: Date;
   likeStatus: LikeStatus;
+  isCurrentUserAnswerAuthor: boolean;
 }
 
 export type Answer = AnswerResponse;
