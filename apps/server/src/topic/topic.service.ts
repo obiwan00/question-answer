@@ -6,7 +6,7 @@ import { CreateTopicDto, TopicResponseDto, TopicsResponseDto, TopicWithAnswersRe
 import { TopicEntity } from '@qa/server/topic/topic.entity';
 import { UserEntity } from '@qa/server/user/user.entity';
 import { UserService } from '@qa/server/user/user.service';
-import { LikeStatus, TopicsRequest } from 'libs/api-interfaces';
+import { LikeStatus, TopicsRequest } from '@qa/api-interfaces';
 import slugify from "slugify";
 import { DeleteResult, getRepository, In, Repository } from 'typeorm';
 
@@ -39,7 +39,7 @@ export class TopicService {
     if (query.search) {
       queryBuilder.andWhere(
         'LOWER(topics.title) LIKE LOWER(:search) OR LOWER(topics.body) LIKE LOWER(:search)',
-        { search: `%${query.search}%` }
+        { search: `%${query.search}%` },
       );
     }
 
@@ -88,7 +88,7 @@ export class TopicService {
       topic: null,
       currentUserId: null,
       currentUserWithLikeStatus: null,
-    }
+    },
   ): Promise<TopicResponseDto> {
     currentUserWithLikeStatus = currentUserWithLikeStatus || await this.userService.getUserByIdWithTopicLikeStatus(currentUserId);
     const likeStatus = this.getTopicLikeStatus(topic.id, currentUserWithLikeStatus);
@@ -156,9 +156,9 @@ export class TopicService {
   public async getTopicBySlugWithAnswers(slug: string, currentUserId?: number): Promise<TopicWithAnswersResponseDto> {
     const topicById = await this.findTopicBySlug(slug);
 
-    const answers = await this.answerServices.findAnswersForTopic(topicById.id, currentUserId)
+    const answers = await this.answerServices.findAnswersForTopic(topicById.id, currentUserId);
 
-    const formattedTopic = await this.buildTopicResponse({ topic: topicById, currentUserId })
+    const formattedTopic = await this.buildTopicResponse({ topic: topicById, currentUserId });
 
     return {
       ...formattedTopic,
@@ -194,7 +194,7 @@ export class TopicService {
     const topicForInteraction = await this.findTopicById(topicId);
     const currentUser = await this.userService.getUserByIdWithTopicLikeStatus(currentUserId);
 
-    const isAlreadyLikedTopicIndex = currentUser.topicLikes.findIndex((likedTopic) => likedTopic.id === topicForInteraction.id)
+    const isAlreadyLikedTopicIndex = currentUser.topicLikes.findIndex((likedTopic) => likedTopic.id === topicForInteraction.id);
     if (isAlreadyLikedTopicIndex !== -1) {
       currentUser.topicLikes.splice(isAlreadyLikedTopicIndex, 1);
       topicForInteraction.likesCount--;
@@ -202,7 +202,7 @@ export class TopicService {
       currentUser.topicLikes.push(topicForInteraction);
       topicForInteraction.likesCount++;
 
-      const isAlreadyDislikedTopicIndex = currentUser.topicDislikes.findIndex((dislikedTopic) => dislikedTopic.id === topicForInteraction.id)
+      const isAlreadyDislikedTopicIndex = currentUser.topicDislikes.findIndex((dislikedTopic) => dislikedTopic.id === topicForInteraction.id);
       if (isAlreadyDislikedTopicIndex !== -1) {
         currentUser.topicDislikes.splice(isAlreadyDislikedTopicIndex, 1);
         topicForInteraction.likesCount++;
@@ -218,7 +218,7 @@ export class TopicService {
     const topicForInteraction = await this.findTopicById(topicId);
     const currentUser = await this.userService.getUserByIdWithTopicLikeStatus(currentUserId);
 
-    const isAlreadyDislikedTopicIndex = currentUser.topicDislikes.findIndex((dislikedTopic) => dislikedTopic.id === topicForInteraction.id)
+    const isAlreadyDislikedTopicIndex = currentUser.topicDislikes.findIndex((dislikedTopic) => dislikedTopic.id === topicForInteraction.id);
     if (isAlreadyDislikedTopicIndex !== -1) {
       currentUser.topicDislikes.splice(isAlreadyDislikedTopicIndex, 1);
       topicForInteraction.likesCount++;
@@ -226,7 +226,7 @@ export class TopicService {
       currentUser.topicDislikes.push(topicForInteraction);
       topicForInteraction.likesCount--;
 
-      const isAlreadyLikedTopicIndex = currentUser.topicLikes.findIndex((likedTopic) => likedTopic.id === topicForInteraction.id)
+      const isAlreadyLikedTopicIndex = currentUser.topicLikes.findIndex((likedTopic) => likedTopic.id === topicForInteraction.id);
       if (isAlreadyLikedTopicIndex !== -1) {
         currentUser.topicLikes.splice(isAlreadyLikedTopicIndex, 1);
         topicForInteraction.likesCount--;

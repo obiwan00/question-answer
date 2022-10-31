@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
-import { CreateTopic, TopicResponse, TopicsRequest, TopicsResponse, TopicWithAnswersResponse, UpdateTopic } from 'libs/api-interfaces';
+import { CreateTopic, TopicResponse, TopicsRequest, TopicsResponse, TopicWithAnswersResponse, UpdateTopic } from '@qa/api-interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -35,8 +35,8 @@ export class TopicService {
   public getTopics(params?: TopicsRequest): Observable<TopicsResponse> {
     return this.httpClient.get<TopicsResponse>('api/topics', {
       params: {
-        ...params
-      }
+        ...params,
+      },
     });
   }
 

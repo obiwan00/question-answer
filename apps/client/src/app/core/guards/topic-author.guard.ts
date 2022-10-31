@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
 import { TopicService } from '@qa/client/app/core/services/topic.service';
 import { map, Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,6 @@ export class TopicAuthorGuard implements CanActivate {
 
   public canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const topicSlug = route.paramMap.get('topicSlug');
 

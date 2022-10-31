@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
 import { TopicService } from '@qa/client/app/core/services/topic.service';
-import { TopicWithAnswers, UpdateTopic } from 'libs/api-interfaces';
+import { TopicWithAnswers, UpdateTopic } from '@qa/api-interfaces';
 import { finalize, ReplaySubject, takeUntil } from 'rxjs';
 
 interface EditTopicFormGroup {
@@ -53,7 +53,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.topicWithAnswers = this.route.snapshot.data['topicWithAnswers'];
-    this.setTopicDataToFormVales()
+    this.setTopicDataToFormVales();
   }
 
 
@@ -63,9 +63,15 @@ export class EditTopicComponent implements OnInit, OnDestroy {
   }
 
   public editTopic(): void {
+    const { title, body } = this.editTopicForm.value;
+
+    if (!title || !body) {
+      return;
+    }
+
     const editTopicPayload: UpdateTopic = {
-      title: this.editTopicForm.get('title')!.value,
-      body: this.editTopicForm.get('body')!.value,
+      title,
+      body,
       tags: this.tags,
     };
 
@@ -135,7 +141,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
     this.editTopicForm.patchValue({
       title: this.topicWithAnswers.title,
       body: this.topicWithAnswers.body,
-    })
+    });
     this.tags = this.topicWithAnswers.tags;
   }
 }

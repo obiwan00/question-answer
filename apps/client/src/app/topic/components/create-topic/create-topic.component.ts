@@ -1,12 +1,12 @@
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { TopicService } from '@qa/client/app/core/services/topic.service';
-import { CreateTopic } from 'libs/api-interfaces';
-import { finalize, ReplaySubject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
+import { CreateTopic } from '@qa/api-interfaces';
+import { TopicService } from '@qa/client/app/core/services/topic.service';
+import { finalize, ReplaySubject, takeUntil } from 'rxjs';
 
 interface CreateTopicFormGroup {
   title: FormControl<string>;
@@ -52,11 +52,17 @@ export class CreateTopicComponent implements OnDestroy {
   }
 
   public createTopic(): void {
-    const createTopicPayload: CreateTopic = {
-      title: this.createTopicForm.get('title')!.value,
-      body: this.createTopicForm.get('body')!.value,
-      tags: this.tags,
+    const { title, body } = this.createTopicForm.value;
+
+    if (!title || !body) {
+      return;
     }
+
+    const createTopicPayload: CreateTopic = {
+      title,
+      body,
+      tags: this.tags,
+    };
 
     this.isCreating = true;
     this.topicService.createTopic(createTopicPayload)
@@ -65,7 +71,7 @@ export class CreateTopicComponent implements OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(() => {
-        this.showSnackBarForSuccessfulCreating()
+        this.showSnackBarForSuccessfulCreating();
         this.router.navigate(['/']);
       });
   }
@@ -101,7 +107,7 @@ export class CreateTopicComponent implements OnDestroy {
   }
 
   public get isSubmitDisabled(): boolean {
-    return !this.createTopicForm.valid || this.isCreating
+    return !this.createTopicForm.valid || this.isCreating;
   }
 
   private showSnackBarForSameTagAdding(): void {

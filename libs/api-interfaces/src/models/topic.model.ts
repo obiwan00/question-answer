@@ -1,5 +1,4 @@
-import { AnswerResponse } from "libs/api-interfaces/src/models/answer.model";
-import { UserResponse } from "libs/api-interfaces/src/models/user.model";
+import { UserResponse, AnswerResponse } from "@qa/api-interfaces";
 
 export interface TopicsRequest {
   offset?: number;
@@ -50,5 +49,4 @@ export interface CreateTopic {
   tags: string[];
 }
 
-export interface UpdateTopic extends CreateTopic {
-}
+export type UpdateTopic = CreateTopic

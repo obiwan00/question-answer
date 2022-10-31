@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
 import { TopicService } from '@qa/client/app/core/services/topic.service';
-import { Topic } from 'libs/api-interfaces';
+import { Topic } from '@qa/api-interfaces';
 import { finalize, ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
@@ -12,7 +12,7 @@ import { finalize, ReplaySubject, takeUntil } from 'rxjs';
 })
 export class TopicComponent implements OnInit, OnDestroy {
 
-  @Input() topic: Topic;
+  @Input() public topic: Topic;
 
   public isUpdating = false;
   public isCurrentUserTopicAuthor: boolean;
@@ -26,7 +26,7 @@ export class TopicComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.isCurrentUserTopicAuthor = this.topic.author.id === this.authService.user?.id
+    this.isCurrentUserTopicAuthor = this.topic.author.id === this.authService.user?.id;
   }
 
   public ngOnDestroy(): void {
@@ -43,7 +43,7 @@ export class TopicComponent implements OnInit, OnDestroy {
       )
       .subscribe((topic => {
         this.topic = topic;
-      }))
+      }));
   }
 
   public dislikeTopic(): void {
@@ -55,7 +55,7 @@ export class TopicComponent implements OnInit, OnDestroy {
       )
       .subscribe((topic => {
         this.topic = topic;
-      }))
+      }));
   }
 
   public editTopic(): void {

@@ -5,7 +5,7 @@ import { TopicService } from '@qa/server/topic/topic.service';
 import { User } from '@qa/server/user/decorators/user.decorator';
 import { AuthGuard } from '@qa/server/user/guards/user.guard';
 import { UserEntity } from '@qa/server/user/user.entity';
-import { TopicsRequest } from 'libs/api-interfaces';
+import { TopicsRequest } from '@qa/api-interfaces';
 import { DeleteResult } from 'typeorm';
 
 @ApiTags('topic')

@@ -4,7 +4,7 @@ import { AnswerEntity } from '@qa/server/answer/answer.entity';
 import { TopicService } from '@qa/server/topic/topic.service';
 import { UserEntity } from '@qa/server/user/user.entity';
 import { UserService } from '@qa/server/user/user.service';
-import { LikeStatus } from 'libs/api-interfaces';
+import { LikeStatus } from '@qa/api-interfaces';
 import { FindOneOptions, Repository } from 'typeorm';
 import { AnswerResponseDto, CreateAnswerDto, UpdateAnswerDto } from './dto/answer.dto';
 
@@ -27,7 +27,7 @@ export class AnswerService {
     const topic = await this.topicService.findTopicById(createAnswerDto.topicId);
 
     const newAnswer = new AnswerEntity();
-    newAnswer.body = createAnswerDto.body
+    newAnswer.body = createAnswerDto.body;
     newAnswer.author = currentUser;
     newAnswer.topic = topic;
 
@@ -48,7 +48,7 @@ export class AnswerService {
   }
 
   public async update(answerId: number, currentUserId: number, updateAnswerDto: UpdateAnswerDto): Promise<AnswerEntity> {
-    const answerToUpdate = await this.findAnswerById(answerId)
+    const answerToUpdate = await this.findAnswerById(answerId);
 
     if (answerToUpdate.author.id !== currentUserId) {
       throw new HttpException("You don't have rights to update this answer", HttpStatus.FORBIDDEN);
@@ -94,7 +94,7 @@ export class AnswerService {
     const answerForInteraction = await this.findAnswerById(answerId);
     const currentUser = await this.userService.getUserByIdWithAnswerLikeStatus(currentUserId);
 
-    const isAlreadyLikedAnswerIndex = currentUser.answerLikes.findIndex((likedAnswer) => likedAnswer.id === answerForInteraction.id)
+    const isAlreadyLikedAnswerIndex = currentUser.answerLikes.findIndex((likedAnswer) => likedAnswer.id === answerForInteraction.id);
     if (isAlreadyLikedAnswerIndex !== -1) {
       currentUser.answerLikes.splice(isAlreadyLikedAnswerIndex, 1);
       answerForInteraction.likesCount--;
@@ -102,7 +102,7 @@ export class AnswerService {
       currentUser.answerLikes.push(answerForInteraction);
       answerForInteraction.likesCount++;
 
-      const isAlreadyDislikedAnswerIndex = currentUser.answerDislikes.findIndex((dislikedAnswer) => dislikedAnswer.id === answerForInteraction.id)
+      const isAlreadyDislikedAnswerIndex = currentUser.answerDislikes.findIndex((dislikedAnswer) => dislikedAnswer.id === answerForInteraction.id);
       if (isAlreadyDislikedAnswerIndex !== -1) {
         currentUser.answerDislikes.splice(isAlreadyDislikedAnswerIndex, 1);
         answerForInteraction.likesCount++;
@@ -118,7 +118,7 @@ export class AnswerService {
     const answerForInteraction = await this.findAnswerById(answerId);
     const currentUser = await this.userService.getUserByIdWithAnswerLikeStatus(currentUserId);
 
-    const isAlreadyDislikedAnswerIndex = currentUser.answerDislikes.findIndex((dislikedAnswer) => dislikedAnswer.id === answerForInteraction.id)
+    const isAlreadyDislikedAnswerIndex = currentUser.answerDislikes.findIndex((dislikedAnswer) => dislikedAnswer.id === answerForInteraction.id);
     if (isAlreadyDislikedAnswerIndex !== -1) {
       currentUser.answerDislikes.splice(isAlreadyDislikedAnswerIndex, 1);
       answerForInteraction.likesCount++;
@@ -126,7 +126,7 @@ export class AnswerService {
       currentUser.answerDislikes.push(answerForInteraction);
       answerForInteraction.likesCount--;
 
-      const isAlreadyLikedAnswerIndex = currentUser.answerLikes.findIndex((likedAnswer) => likedAnswer.id === answerForInteraction.id)
+      const isAlreadyLikedAnswerIndex = currentUser.answerLikes.findIndex((likedAnswer) => likedAnswer.id === answerForInteraction.id);
       if (isAlreadyLikedAnswerIndex !== -1) {
         currentUser.answerLikes.splice(isAlreadyLikedAnswerIndex, 1);
         answerForInteraction.likesCount--;
@@ -142,7 +142,7 @@ export class AnswerService {
     const answersForTopic = await this.answerRepository.find({
       where: { topic: topicId },
       order: { updatedAt: 'DESC' },
-    })
+    });
 
     const currentUserWithLikeStatus = await this.userService.getUserByIdWithAnswerLikeStatus(currentUserId);
 
@@ -163,13 +163,13 @@ export class AnswerService {
     const answersToSameTopic = await this.answerRepository.find({
       where: { topic: answerToAccept.topic.id },
       order: { updatedAt: 'DESC' },
-    })
+    });
 
     answersToSameTopic.map(answer => {
       if (answer.id === answerId) {
         answer.accepted = !answer.accepted;
       } else {
-        answer.accepted = false
+        answer.accepted = false;
       }
 
       return answer;

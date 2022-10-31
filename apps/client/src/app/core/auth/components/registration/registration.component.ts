@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { RegisterUserFormGroup } from '@qa/client/app/core/models/auth.model';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
 import { partialToRequiredGuard } from '@qa/client/app/core/utils/type-guard.util';
-import { CreateUser } from 'libs/api-interfaces';
+import { CreateUser } from '@qa/api-interfaces';
 import { catchError, finalize, throwError } from 'rxjs';
 
 @Component({
@@ -39,7 +39,7 @@ export class RegistrationComponent {
   }
 
   public submitRegistration(): void {
-    const registrationPayload = this.registrationForm.value
+    const registrationPayload = this.registrationForm.value;
 
     if (!partialToRequiredGuard<CreateUser>(registrationPayload)) {
       return;
@@ -68,10 +68,10 @@ export class RegistrationComponent {
       });
   }
 
-  public shouldShowErrorMessages(fieldName: keyof RegisterUserFormGroup) {
+  public shouldShowErrorMessages(fieldName: keyof RegisterUserFormGroup): boolean {
     const control = this.registrationForm.get(fieldName);
 
-    return control?.invalid && (control.dirty || control.touched)
+    return !!(control?.invalid && (control?.dirty || control?.touched));
   }
 
   public getFieldErrorsKeys(fieldName: keyof RegisterUserFormGroup): ValidationErrors | null | undefined {

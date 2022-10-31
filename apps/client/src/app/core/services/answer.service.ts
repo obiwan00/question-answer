@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
-import { AnswerResponse } from 'libs/api-interfaces';
+import { AnswerResponse } from '@qa/api-interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({

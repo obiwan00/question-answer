@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { LikeStatus } from 'libs/api-interfaces';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { LikeStatus } from '@qa/api-interfaces';
 
 @Component({
   selector: 'qa-rating',

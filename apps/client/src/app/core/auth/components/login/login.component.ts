@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { LoginUserFormGroup } from '@qa/client/app/core/models/auth.model';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
 import { partialToRequiredGuard } from '@qa/client/app/core/utils/type-guard.util';
-import { LoginUser } from 'libs/api-interfaces';
+import { LoginUser } from '@qa/api-interfaces';
 import { catchError, finalize, throwError } from 'rxjs';
 
 
@@ -39,7 +39,7 @@ export class LoginComponent {
   }
 
   public submitLogin(): void {
-    const loginPayload = this.loginForm.value
+    const loginPayload = this.loginForm.value;
 
     if (!partialToRequiredGuard<LoginUser>(loginPayload)) {
       return;
@@ -68,10 +68,10 @@ export class LoginComponent {
       });
   }
 
-  public shouldShowErrorMessages(fieldName: keyof LoginUserFormGroup) {
+  public shouldShowErrorMessages(fieldName: keyof LoginUserFormGroup): boolean {
     const control = this.loginForm.get(fieldName);
 
-    return control?.invalid && (control.dirty || control.touched)
+    return !!(control?.invalid && (control?.dirty || control?.touched));
   }
 
   public getFieldErrorsKeys(fieldName: keyof LoginUserFormGroup): ValidationErrors | null | undefined {

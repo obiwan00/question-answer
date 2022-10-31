@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TopicService } from '@qa/client/app/core/services/topic.service';
-import { TopicsRequest, TopicsResponse } from 'libs/api-interfaces';
+import { TopicsRequest, TopicsResponse } from '@qa/api-interfaces';
 import { finalize, Observable } from 'rxjs';
 
 @Component({
@@ -11,7 +11,7 @@ export class TopicsFeedComponent {
 
   public isLoading = false;
   public topics$ = this.getTopicsByQueryParams();
-  public topicRequestQueryParams: TopicsRequest = {}
+  public topicRequestQueryParams: TopicsRequest = {};
 
   public constructor(
     private topicService: TopicService,
@@ -30,9 +30,8 @@ export class TopicsFeedComponent {
     if (!this.topicRequestQueryParams.search) {
       return;
     }
-    console.log(this.topicRequestQueryParams);
+
     delete this.topicRequestQueryParams.search;
-    console.log(this.topicRequestQueryParams);
 
     this.topics$ = this.getTopicsByQueryParams();
   }

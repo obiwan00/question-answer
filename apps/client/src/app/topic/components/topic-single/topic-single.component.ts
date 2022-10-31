@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AnswerService } from '@qa/client/app/core/services/answer.service';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
 import { TopicService } from '@qa/client/app/core/services/topic.service';
-import { Answer, TopicWithAnswers } from 'libs/api-interfaces';
+import { Answer, TopicWithAnswers } from '@qa/api-interfaces';
 import { finalize, Observable, ReplaySubject, takeUntil, tap } from 'rxjs';
 
 @Component({
   templateUrl: './topic-single.component.html',
   styleUrls: ['./topic-single.component.scss'],
 })
-export class TopicSingleComponent implements OnInit {
+export class TopicSingleComponent implements OnInit, OnDestroy {
 
   public isLoadingTopicWithAnswers: boolean;
   public isAnswersLoading: boolean;
@@ -68,16 +68,16 @@ export class TopicSingleComponent implements OnInit {
     this.isLoadingTopicWithAnswers = true;
     return this.topicService.getTopicWithAnswersBySlug(slug).pipe(
       tap((topicWithAnswer) => {
-        this.isCurrentUserTopicAuthor = topicWithAnswer.author.id === this.authService.user?.id
+        this.isCurrentUserTopicAuthor = topicWithAnswer.author.id === this.authService.user?.id;
       }),
       finalize(() => this.isLoadingTopicWithAnswers = false),
       takeUntil(this.destroy$),
     );
   }
 
-  private updateAnswersAndAnswersMetadata(answers: Answer[]) {
-    this.topicWithAnswers.answersCount = answers.length
-    this.topicWithAnswers.hasAcceptedAnswer = !!answers.find(answer => answer.accepted)
+  private updateAnswersAndAnswersMetadata(answers: Answer[]): void {
+    this.topicWithAnswers.answersCount = answers.length;
+    this.topicWithAnswers.hasAcceptedAnswer = !!answers.find(answer => answer.accepted);
     this.topicWithAnswers.answers = answers;
   }
 

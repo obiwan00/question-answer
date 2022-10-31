@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { AnswerService } from '@qa/client/app/core/services/answer.service';
-import { Answer } from 'libs/api-interfaces';
+import { Answer } from '@qa/api-interfaces';
 import { finalize, ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
@@ -18,11 +18,11 @@ export class AnswerComponent implements OnDestroy {
   @Output() public loading = new EventEmitter<boolean>();
 
   public _isLoading = false;
-  get isLoading() {
+  public get isLoading(): boolean {
     return this._isLoading;
   }
 
-  set isLoading(value: boolean) {
+  public set isLoading(value: boolean) {
     this._isLoading = value;
     this.loading.emit(value);
   }
@@ -33,7 +33,7 @@ export class AnswerComponent implements OnDestroy {
     private answerService: AnswerService,
   ) { }
 
-  get isDisabled() {
+  public get isDisabled(): boolean {
     return this.disabled || this.isLoading;
   }
 

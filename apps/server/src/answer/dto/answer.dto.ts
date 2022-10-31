@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 import { UserResponseDto } from '@qa/server/user/dto/user.dto';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { AnswerResponse, CreateAnswer, LikeStatus, UpdateAnswer } from "libs/api-interfaces";
+import { AnswerResponse, CreateAnswer, LikeStatus, UpdateAnswer } from "@qa/api-interfaces";
 
 export class CreateAnswerDto implements CreateAnswer {
   @ApiProperty()
