@@ -8,6 +8,7 @@
           *ngIf="!isShowingCreateAnswer"
           mat-raised-button
           color="accent"
+          [disabled]="isAnswersLoading"
           (click)="handleAddNewAnswerClick()">
           Add your answer
           <mat-icon>post_add</mat-icon>
@@ -45,6 +46,7 @@
             <qa-edit-answer
               class="answers__item"
               [answer]="answer"
+              [disabled]="isAnswersLoading"
               (cancel)="handleCancelEditAnswer()"
               (edit)="handleEditAnswer($event)"></qa-edit-answer>
           </ng-template>

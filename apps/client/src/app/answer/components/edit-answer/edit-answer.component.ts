@@ -18,6 +18,15 @@ interface EditAnswerFormGroup {
 export class EditAnswerComponent implements OnInit, OnDestroy {
 
   @Input() public answer: Answer;
+  private _disabled: boolean;
+  @Input() public set disabled(isDisabled: boolean) {
+    this._disabled = isDisabled;
+    if (isDisabled) {
+      this.editAnswerForm.disable();
+    } else {
+      this.editAnswerForm.enable();
+    }
+  }
 
   @Output() public cancel = new EventEmitter<void>();
   @Output() public edit = new EventEmitter<Answer>();
