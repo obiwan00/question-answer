@@ -7,6 +7,8 @@ $app-header-color: mat.get-color-from-palette($light-primary, 100);
 $app-header-active-link-color: mat.get-color-from-palette($light-accent, 800);
 $app-footer-color: mat.get-color-from-palette($light-primary, 100);
 
+$profile-icon-color: mat.get-color-from-palette($light-accent, 600);
+
 $rating-default-background: mat.get-color-from-palette($light-accent, 50);
 $rating-liked-background: mat.get-color-from-palette($light-accent, 400);
 $rating-disliked-background: mat.get-color-from-palette($light-warn, 400);

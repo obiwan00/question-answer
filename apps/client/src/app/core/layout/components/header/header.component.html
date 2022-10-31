@@ -1,12 +1,12 @@
-<header>
-  <div class="container">
+<header class="header">
+  <div class="container header__container">
     <a [routerLink]="['/']">
       <img
-        class="logo"
+        class="header__logo"
         src="/assets/images/qa-logo.png"
         alt="Question and answer">
     </a>
-    <nav class="navigation-main">
+    <nav class="header__nav">
       <ul>
         <li><a
             [routerLink]="['/', 'topics']"
@@ -22,20 +22,27 @@
           </a></li>
       </ul>
     </nav>
-    <div class="auth-buttons">
+    <div class="header__action-buttons">
       <a
         [routerLink]="['/topics/create']"
         mat-raised-button
         color="accent">
         Create topic
       </a>
+      <br>
       <ng-container *ngIf="isLoggedIn; else notLoggedInContent">
-        <button
-          (click)="logout()"
-          mat-raised-button
-          color="primary">
-          Logout
-        </button>
+        <div class="header__authenticated">
+          <div class="profile">
+            <mat-icon>account_circle</mat-icon>
+            {{ user?.username }}
+          </div>
+          <button
+            (click)="logout()"
+            mat-raised-button
+            color="primary">
+            Logout
+          </button>
+        </div>
       </ng-container>
       <ng-template #notLoggedInContent>
         <a
