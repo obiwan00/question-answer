@@ -31,6 +31,7 @@
           *ngIf="isShowingCreateAnswer"
           (cancel)="handleCancelCreateAnswer()"
           (create)="handleCreateNewAnswer($event)"
+          [disabled]="isAnswersLoading"
           [topicId]="topicWithAnswers.id"></qa-create-answer>
         <ng-container *ngFor="let answer of topicWithAnswers.answers">
           <qa-answer

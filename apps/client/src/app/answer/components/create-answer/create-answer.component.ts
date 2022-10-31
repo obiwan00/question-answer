@@ -18,6 +18,15 @@ interface CreateAnswerFormGroup {
 export class CreateAnswerComponent implements OnDestroy {
 
   @Input() public topicId: number;
+  private _disabled: boolean;
+  @Input() public set disabled(isDisabled: boolean) {
+    this._disabled = isDisabled;
+    if (isDisabled) {
+      this.createAnswerForm.disable();
+    } else {
+      this.createAnswerForm.enable();
+    }
+  }
 
   @Output() public cancel = new EventEmitter<void>();
   @Output() public create = new EventEmitter<Answer>();
