@@ -1,12 +1,12 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LikeStatus, TopicsRequest } from '@qa/api-interfaces';
 import { AnswerService } from '@qa/server/answer/answer.service';
 import { TagService } from '@qa/server/tag/tag.service';
 import { CreateTopicDto, TopicResponseDto, TopicsResponseDto, TopicWithAnswersResponseDto, UpdateTopicDto } from '@qa/server/topic/dto/topic.dto';
 import { TopicEntity } from '@qa/server/topic/topic.entity';
 import { UserEntity } from '@qa/server/user/user.entity';
 import { UserService } from '@qa/server/user/user.service';
-import { LikeStatus, TopicsRequest } from '@qa/api-interfaces';
 import slugify from "slugify";
 import { DeleteResult, getRepository, In, Repository } from 'typeorm';
 
@@ -242,5 +242,25 @@ export class TopicService {
     await this.userRepository.save(currentUser);
     await this.topicRepository.save(topicForInteraction);
     return topicForInteraction;
+  }
+
+  public async getConnectedToChatUsersByTopicId(topicId: number): Promise<UserEntity[]> {
+    const topicById = await this.topicRepository.findOne({
+      where: { id: topicId },
+      relations: ['connectedToChatUsers'],
+    });
+
+    return topicById.connectedToChatUsers;
+  }
+
+  public async deleteAllConnectedToChatUsers(): Promise<void> {
+    const topics = await this.topicRepository.find({
+      relations: ['connectedToChatUsers'],
+    });
+
+    topics.forEach((topic) => topic.connectedToChatUsers = []);
+    await this.topicRepository.save(topics);
+    // I would like to find more effective way to solve it,
+    //   but typeorm CAN NOT execute this.topicRepository.find({where: connectedToChatUsers: Not(IsNull())})
   }
 }

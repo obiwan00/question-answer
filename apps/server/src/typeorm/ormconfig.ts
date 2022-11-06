@@ -1,4 +1,5 @@
 import { AnswerEntity } from '@qa/server/answer/answer.entity';
+import { MessageEntity } from '@qa/server/chat/entities/message.entity';
 import { TagEntity } from '@qa/server/tag/tag.entity';
 import { TopicEntity } from '@qa/server/topic/topic.entity';
 import { ensureObjectValues } from '@qa/server/typeorm/config/ensure-values.util';
@@ -40,6 +41,7 @@ const ormconfig: ConnectionOptions = {
     UserEntity,
     TopicEntity,
     AnswerEntity,
+    MessageEntity,
   ],
   migrations: [join(__dirname, './migrations/**/*{.ts, .js}')],
   cli: {

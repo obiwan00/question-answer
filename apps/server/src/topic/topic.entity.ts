@@ -1,4 +1,5 @@
 import { AnswerEntity } from "@qa/server/answer/answer.entity";
+import { MessageEntity } from "@qa/server/chat/entities/message.entity";
 import { TagEntity } from "@qa/server/tag/tag.entity";
 import { UserEntity } from "@qa/server/user/user.entity";
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
@@ -35,6 +36,12 @@ export class TopicEntity {
 
   @OneToMany(() => AnswerEntity, (answer) => answer.topic)
   public answers: AnswerEntity[];
+
+  @OneToMany(() => UserEntity, user => user.connectedTopicChat)
+  public connectedToChatUsers: UserEntity[];
+
+  @OneToMany(() => MessageEntity, (message) => message.topic)
+  public messages: MessageEntity[];
 
   @CreateDateColumn({ name: 'created_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   public createdAt: Date;

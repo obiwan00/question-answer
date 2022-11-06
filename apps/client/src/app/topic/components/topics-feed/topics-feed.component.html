@@ -9,7 +9,12 @@
     *ngIf="topicRequestQueryParams.search">
     Search results by query "{{topicRequestQueryParams.search}}":
   </div>
-  <qa-topic
-    *ngFor="let topic of (topics$ | async)?.topics"
-    [topic]="topic"></qa-topic>
+  <ng-container *ngIf="(topics$ | async) as topicsWithMetaData">
+    <ng-container *ngIf="topicsWithMetaData.topics.length; else noTopics">
+      <qa-topic
+        *ngFor="let topic of topicsWithMetaData.topics"
+        [topic]="topic"></qa-topic>
+    </ng-container>
+    <ng-template #noTopics>There is not any topic.</ng-template>
+  </ng-container>
 </div>

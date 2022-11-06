@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AboutModule } from '@qa/client/app/about/about.module';
 import { AppRoutingModule } from '@qa/client/app/app-routing.module';
+import { ChatModule } from '@qa/client/app/chat/chat.module';
 import { AuthInterceptor } from '@qa/client/app/core/auth/auth.interseptor';
 import { AuthModule } from '@qa/client/app/core/auth/auth.module';
 import { LayoutModule } from '@qa/client/app/core/layout/layout.module';
@@ -27,7 +28,17 @@ const APP_MODULES = [
   LayoutModule,
   AboutModule,
   TopicModule,
+  ChatModule,
 ];
+
+const HTTP_INTERCEPTORS_PROVIDERS = [
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true,
+  },
+];
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,11 +47,7 @@ const APP_MODULES = [
     ...APP_MODULES,
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
+    ...HTTP_INTERCEPTORS_PROVIDERS,
   ],
   bootstrap: [AppComponent],
 })

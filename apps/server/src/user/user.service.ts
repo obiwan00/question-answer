@@ -114,4 +114,33 @@ export class UserService {
       relations: ['answerLikes', 'answerDislikes'],
     });
   }
+
+  public async setSocketId(user: UserEntity, socketId: string): Promise<UserEntity> {
+    user.socketId = socketId;
+
+    return this.userRepository.save(user);
+  }
+
+  public async removeSocketIdByUser(user: UserEntity): Promise<UserEntity> {
+    user.socketId = null;
+
+    return this.userRepository.save(user);
+  }
+
+  public async setConnectedTopicChat(user: UserEntity, topicId: number): Promise<UserEntity> {
+    Object.assign(user, {
+      connectedTopicChat: topicId,
+    });
+
+    return this.userRepository.save(user);
+  }
+
+  public async removeSocketIdBySocketId(socketId: string): Promise<void> {
+    const userBySocketId = await this.userRepository.findOne({
+      where: { socketId },
+    });
+
+    userBySocketId.socketId = null;
+    this.userRepository.save(userBySocketId);
+  }
 }

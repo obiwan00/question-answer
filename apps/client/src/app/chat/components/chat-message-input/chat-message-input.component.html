@@ -1,0 +1,14 @@
+<form
+  [formGroup]="messageInputForm"
+  (ngSubmit)="submit()">
+  <input
+    type="text"
+    placeholder="Enter you message here"
+    formControlName="message">
+  <button
+    mat-icon-button
+    color="accent"
+    aria-label="Send message">
+    <mat-icon>send</mat-icon>
+  </button>
+</form>

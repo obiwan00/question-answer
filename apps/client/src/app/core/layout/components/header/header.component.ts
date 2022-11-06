@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@qa/client/app/core/services/auth.service';
-import { AuthorizedUser } from '@qa/api-interfaces';
+import { AuthenticatedUser } from '@qa/api-interfaces';
 
 @Component({
   selector: 'qa-header',
@@ -20,7 +20,7 @@ export class HeaderComponent {
     return this.authService.isLoggedIn;
   }
 
-  public get user(): AuthorizedUser | null {
+  public get user(): AuthenticatedUser | null {
     return this.authService.user;
   }
 

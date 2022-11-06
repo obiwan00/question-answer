@@ -1,0 +1,27 @@
+@import "theme-variables";
+
+.chat-message {
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px solid $chat-message-border;
+  background-color: $chat-message-background;
+
+  line-height: 1.5;
+
+  &--current-user-author {
+    background-color: $chat-users-message-background;
+  }
+  &__author {
+    font-size: 13px;
+  }
+
+  &__message {
+    font-size: 16px;
+  }
+
+  &__date {
+    text-align: left;
+    font-size: 12px;
+    color: $chat-message-date-color;
+  }
+}

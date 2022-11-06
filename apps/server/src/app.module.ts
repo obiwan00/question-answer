@@ -1,11 +1,12 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AnswerModule } from '@qa/server/answer/answer.module';
+import { ChatModule } from '@qa/server/chat/chat.module';
 import { TagModule } from '@qa/server/tag/tag.module';
+import { TopicModule } from '@qa/server/topic/topic.module';
 import ormconfig from '@qa/server/typeorm/ormconfig';
 import { AuthMiddleware } from '@qa/server/user/middlewares/auth.middleware';
 import { UserModule } from '@qa/server/user/user.module';
-import { TopicModule } from './topic/topic.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TopicModule } from './topic/topic.module';
     TagModule,
     TopicModule,
     AnswerModule,
+    ChatModule,
   ],
 })
 export class AppModule {

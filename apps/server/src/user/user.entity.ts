@@ -1,7 +1,8 @@
 import { AnswerEntity } from "@qa/server/answer/answer.entity";
+import { MessageEntity } from "@qa/server/chat/entities/message.entity";
 import { TopicEntity } from "@qa/server/topic/topic.entity";
 import { getHashedString } from "@qa/server/user/utils/hash-string.util";
-import { BeforeInsert, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -32,6 +33,15 @@ export class UserEntity {
 
   @OneToMany(() => AnswerEntity, (topic) => topic.author)
   public answers: AnswerEntity[];
+
+  @ManyToOne(() => TopicEntity, (topic) => topic.connectedToChatUsers)
+  public connectedTopicChat: TopicEntity;
+
+  @Column({ nullable: true })
+  public socketId: string;
+
+  @OneToMany(() => MessageEntity, (message) => message.author)
+  public messages: MessageEntity[];
 
   @ManyToMany(() => TopicEntity, (topic) => topic.likes)
   @JoinTable()

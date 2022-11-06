@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthorizedUser, CreateUser, LoginUser, UserAuthResponse } from '@qa/api-interfaces';
-import { LocalStorageKey } from '@qa/client/app/core/models/storage.model';
-import { LocalStorageService } from '@qa/client/app/core/services/storage.service';
+import { AuthenticatedUser, CreateUser, LoginUser, UserAuthResponse } from '@qa/api-interfaces';
+import { SocketService } from '@qa/client/app/core/services/socket.service';
+import { UserStorageService } from '@qa/client/app/core/services/user-storage.service';
 import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
@@ -11,19 +11,23 @@ import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
 })
 export class AuthService {
 
-  private user$$ = new BehaviorSubject<AuthorizedUser | null>(null);
+  private user$$ = new BehaviorSubject<AuthenticatedUser | null>(null);
   public user$ = this.user$$.asObservable();
 
   public constructor(
     private httpClient: HttpClient,
-    private localStorageService: LocalStorageService,
+    private userStorageService: UserStorageService,
     private snackBar: MatSnackBar,
+    private socketService: SocketService,
   ) {
     this.initUser();
   }
 
   public initUser(): void {
-    this.user$$.next(this.localStorageService.getParsedData(LocalStorageKey.AUTHORIZED_USER));
+    const storedAuthenticatedUser = this.userStorageService.getUser();
+    this.user$$.next(storedAuthenticatedUser);
+
+    this.socketService.setNewSocket();
   }
 
   public login(payload: LoginUser): Observable<UserAuthResponse> {
@@ -36,8 +40,10 @@ export class AuthService {
   }
 
   public logout(): void {
-    this.localStorageService.removeData(LocalStorageKey.AUTHORIZED_USER);
+    this.userStorageService.removeUser();
     this.user$$.next(null);
+
+    this.socketService.setNewSocket();
   }
 
   public register(payload: CreateUser): Observable<UserAuthResponse> {
@@ -49,7 +55,7 @@ export class AuthService {
       );
   }
 
-  public get user(): AuthorizedUser | null {
+  public get user(): AuthenticatedUser | null {
     return this.user$$.value;
   }
 
@@ -69,12 +75,11 @@ export class AuthService {
     return throwError('Unauthorized user');
   }
 
-  private setAuthorizedUser(authorizedUser: AuthorizedUser): void {
+  private setAuthorizedUser(authorizedUser: AuthenticatedUser): void {
     this.user$$.next(authorizedUser);
-    this.saveUserToLocalStorage(authorizedUser);
+    this.userStorageService.saveUser(authorizedUser);
+
+    this.socketService.setNewSocket();
   }
 
-  private saveUserToLocalStorage(user: AuthorizedUser): void {
-    this.localStorageService.saveStringifiedData(LocalStorageKey.AUTHORIZED_USER, user);
-  }
 }

@@ -1,0 +1,7 @@
+<section
+  class="chat-message"
+  [class.chat-message--current-user-author]="isMessageAuthorCurrentUser">
+  <div class="chat-message__author">{{ message.author.username }}</div>
+  <div class="chat-message__message">{{ message.body }}</div>
+  <div class="chat-message__date">{{ message.createdAt | date:'medium' }}</div>
+</section>

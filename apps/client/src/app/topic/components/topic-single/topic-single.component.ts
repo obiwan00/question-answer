@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Answer, TopicWithAnswers } from '@qa/api-interfaces';
 import { AnswerService } from '@qa/client/app/core/services/answer.service';
+import { AuthService } from '@qa/client/app/core/services/auth.service';
 import { TopicService } from '@qa/client/app/core/services/topic.service';
 import { finalize, Observable, ReplaySubject, takeUntil } from 'rxjs';
 
@@ -25,6 +26,7 @@ export class TopicSingleComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private topicService: TopicService,
     private answerService: AnswerService,
+    private authService: AuthService,
   ) { }
 
   public ngOnInit(): void {
@@ -53,6 +55,12 @@ export class TopicSingleComponent implements OnInit, OnDestroy {
   }
 
   public handleAddNewAnswerClick(): void {
+    if (!this.authService.isLoggedIn) {
+      this.authService.showUnauthorizedSnackBar();
+
+      return;
+    }
+
     this.isShowingCreateAnswer = true;
   }
 
@@ -81,7 +89,6 @@ export class TopicSingleComponent implements OnInit, OnDestroy {
 
     this.answerToEditId = null;
   }
-
 
   private initTopicWithAnswers(): void {
     const routeParams = this.route.snapshot.paramMap;

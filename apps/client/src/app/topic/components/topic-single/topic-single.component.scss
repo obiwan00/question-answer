@@ -1,8 +1,17 @@
-.answers {
-  margin-top: 26px;
+.tabs {
   margin-left: auto;
   max-width: 95%;
+  margin-top: 20px;
+  min-height: 500px;
 
+  .chat,
+  .answers {
+    margin-top: 20px;
+    display: block;
+  }
+}
+
+.answers {
   button {
     mat-icon {
       font-size: 20px;

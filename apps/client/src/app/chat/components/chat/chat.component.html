@@ -1,0 +1,34 @@
+<div class="chat">
+  <cdk-virtual-scroll-viewport
+    itemSize="90"
+    role="list"
+    class="chat__messages">
+    <ng-container *cdkVirtualFor="let message of messages, trackBy:messageTrackBy">
+      <ng-container *ngIf="{
+        isMessageAuthorCurrentUser: isCurrentUser(message.author.id)
+      } as chatMessageMetaData">
+        <div
+          class="chat__message-item"
+          role="listitem"
+          [class.chat__message-item--current-user]="chatMessageMetaData.isMessageAuthorCurrentUser">
+          <qa-chat-message
+            [isMessageAuthorCurrentUser]="chatMessageMetaData.isMessageAuthorCurrentUser"
+            [message]="message"></qa-chat-message>
+        </div>
+      </ng-container>
+    </ng-container>
+  </cdk-virtual-scroll-viewport>
+
+  <ng-container *ngIf="isUserLoggedIn; else notLoggedInInfoMessage">
+    <qa-chat-message-input
+      class="chat__input"
+      (sendMessage)="sendMessage($event)"></qa-chat-message-input>
+  </ng-container>
+  <ng-template #notLoggedInInfoMessage>
+    <div class="chat__info-message">
+      <mat-icon color="primary">info</mat-icon>
+      You need to be logged in to send a message.
+    </div>
+  </ng-template>
+
+</div>

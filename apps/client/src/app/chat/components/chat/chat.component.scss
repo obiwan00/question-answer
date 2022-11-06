@@ -1,0 +1,44 @@
+.chat {
+  border: 2px solid black;
+  background-color: white;
+  border-radius: 5px;
+
+  &__messages {
+    min-height: 400px;
+    max-height: 700px;
+    height: 500px;
+    resize: vertical;
+
+    &::ng-deep {
+      .cdk-virtual-scroll-content-wrapper {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+
+  &__message-item {
+    align-self: flex-start;
+    margin: 5px 40px 5px 10px;
+
+    &--current-user {
+      align-self: flex-end;
+      margin-right: 10px;
+      margin-left: 40px;
+    }
+  }
+
+  &__input {
+  }
+
+  &__info-message {
+    border-top: 2px solid black;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      margin-right: 6px;
+    }
+  }
+}
