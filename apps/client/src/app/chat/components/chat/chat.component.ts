@@ -28,7 +28,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
   ) { }
 
-  // TODO: refactor
   public ngOnInit(): void {
     this.chatService.joinChat(this.topicId);
 
