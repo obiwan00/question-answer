@@ -2,6 +2,21 @@
 
 # QuestionAnswer
 
+## 🇺🇸 About "Question Answer" project</h1>
+This is a pet-project for educational purpose. It is a simplified clone of StackOverflow with chats for each topic.
+
+## 🇺🇦 Про "Question Answer" проект</h2>
+Це навчальний проект, спрощена версія StackOverflow з чатами для кожного обговорення.
+
+## 🇺🇸 Technologies used / 🇺🇦 Використані технології:
+
+* Front end: Angular 14, Angular Material 14, Socket.io(WebSocket for chats);
+* Back end: NestJS 9, Typeorm, Socket.io(WebSocket for chats);
+* Monorepo: nrwl/nx;
+* DataBase: PostgreSQL.
+<br>
+
+### Project
 This project was generated using [Nx](https://nx.dev).
 
 <p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
